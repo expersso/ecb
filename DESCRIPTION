@@ -1,10 +1,21 @@
 Package: ecb
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Programmatic access to the European Central Bank's Statistical Data Warehouse (SDW)
 Version: 0.1
-Date: 2015-10-30
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Date: 2015-12-10
+Authors@R: person("Eric", "Persson", email = "expersso5@gmail.com",
+    role = c("aut", "cre"))
+Description: Provides an interface to the European Central Bank's Statistical
+    Data Warehouse API, allowing for programmatic retrieval of a vast quantity
+    of statistical data.
+License: CC0
+URL: https://sdw.ecb.europa.eu/ https://www.ecb.int
 LazyData: TRUE
+Suggests: knitr,
+    rmarkdown,
+    dplyr,
+    ggplot2
+Imports: curl,
+    rsdmx,
+    xml2
+VignetteBuilder: knitr

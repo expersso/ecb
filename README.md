@@ -25,7 +25,6 @@ hicp <- get_data(key, filter)
 ggplot(hicp, aes(x = obstime, y = obsvalue, color = title)) +
   geom_line() +
   facet_wrap(~ref_area, ncol = 3) +
-  scale_y_continuous(breaks = pretty_breaks(5)) +
   scale_x_date(date_labels = "%m-%Y", date_breaks = "3 months") +
   theme_bw(8) +
   theme(legend.position = "bottom") +
@@ -33,7 +32,7 @@ ggplot(hicp, aes(x = obstime, y = obsvalue, color = title)) +
        title = "HICP - headline and core\n")
 ```
 
-![](plot_example-1.png)
+![](vignettes/hicp_plot-1.png)
 
 ### Details
 
@@ -69,16 +68,181 @@ See the [SDW API](https://sdw-wsrest.ecb.europa.eu/) for more details.
 
 #### Using SDW keys
 
--   Dimensions
--   Wildcards
--   AND (+) operator
--   Using "details" = "dataonly" or `get_dimension()`
+The easiest way to find and learn more about SDW series key is to browse the [SDW website](https://sdw.ecb.europa.eu/). After finding the series one is interested in, and applying the relevant filters (frequency, geographic area, etc), one can just copy the key:
+
+![screenshot](vignettes/screenshot.png)
+
+The SDW website also has provides all the necessary metadata, so it is much easier to explore data availability (in terms of available breakdowns, time periods, etc) directly on the website than it is to do it directly through the `ecb` package.
+
+The `ecb` package supports using wildcards in the series key, which takes the form of simply leaving the wildcard dimension empty. For example, the key `ICP.M.DE.N.000000.4.ANR` retrieves HICP data for Germany (`DE`), while leaving the third dimension empty - `ICP.M..N.000000.4.ANR` - retrieves the same data for *all* available countries and country groups.
+
+Instead of wildcarding, one can use the `+` operator to specify multiple values for a dimension. For example, `ICP.M.DE.N.000000+XEF000.4.ANR` retrieves both headline inflation (`000000`) and core inflation (`XEF000`). Learning that e.g. `XEF000` corresponds to core inflation would be done by browsing the SDW website:
+
+![screenshot2](vignettes/screenshot2.png)
+
+To remind oneself of what different values for different dimensions mean, one can use the `get_dimensions)` function, which returns a list of dataframes:
+
+``` r
+dims <- get_dimensions("ICP.M.DE.N.000000+XEF000.4.ANR")
+lapply(dims, head)
+```
+
+    ## $ICP.M.DE.N.000000.4.ANR
+    ##               dim  value
+    ## 1            FREQ      M
+    ## 2        REF_AREA     DE
+    ## 3      ADJUSTMENT      N
+    ## 4        ICP_ITEM 000000
+    ## 5 STS_INSTITUTION      4
+    ## 6      ICP_SUFFIX    ANR
+    ## 
+    ## $ICP.M.DE.N.XEF000.4.ANR
+    ##               dim  value
+    ## 1            FREQ      M
+    ## 2        REF_AREA     DE
+    ## 3      ADJUSTMENT      N
+    ## 4        ICP_ITEM XEF000
+    ## 5 STS_INSTITUTION      4
+    ## 6      ICP_SUFFIX    ANR
 
 ### Extended example
 
--   Restrict with start/end
--   Look up dimensions
--   Merge datasets
+As a more extended example, we will retrieve data to plot the annual change in wages against the annual change in unemployment. [Economic theory](https://en.wikipedia.org/wiki/Phillips_curve) suggests a negative relationship between these two variables.
+
+We start by retrieving the two series, using wildcards for the geographic area dimension:
+
+``` r
+unemp <- get_data("STS.A..N.UNEH.RTT000.4.AV3", 
+                 filter = list(startPeriod = "2000"))
+
+wages <- get_data("MNA.A.N..W2.S1.S1._Z.COM_HW._Z._T._Z.IX.V.N", 
+                 filter = list(startPeriod = "2000"))
+
+head(unemp)
+```
+
+    ##   freq ref_area adjustment sts_concept sts_class sts_institution
+    ## 1    A       AT          N        UNEH    RTT000               4
+    ## 2    A       AT          N        UNEH    RTT000               4
+    ## 3    A       AT          N        UNEH    RTT000               4
+    ## 4    A       AT          N        UNEH    RTT000               4
+    ## 5    A       AT          N        UNEH    RTT000               4
+    ## 6    A       AT          N        UNEH    RTT000               4
+    ##   sts_suffix    obstime obsvalue
+    ## 1        AV3 2000-01-01     4.27
+    ## 2        AV3 2001-01-01     4.02
+    ## 3        AV3 2002-01-01     4.10
+    ## 4        AV3 2003-01-01     4.38
+    ## 5        AV3 2004-01-01     4.88
+    ## 6        AV3 2005-01-01     5.30
+
+``` r
+head(wages)
+```
+
+    ##   freq adjustment ref_area counterpart_area ref_sector counterpart_sector
+    ## 1    A          N       AT               W2         S1                 S1
+    ## 2    A          N       AT               W2         S1                 S1
+    ## 3    A          N       AT               W2         S1                 S1
+    ## 4    A          N       AT               W2         S1                 S1
+    ## 5    A          N       AT               W2         S1                 S1
+    ## 6    A          N       AT               W2         S1                 S1
+    ##   accounting_entry    sto instr_asset activity expenditure unit_measure
+    ## 1               _Z COM_HW          _Z       _T          _Z           IX
+    ## 2               _Z COM_HW          _Z       _T          _Z           IX
+    ## 3               _Z COM_HW          _Z       _T          _Z           IX
+    ## 4               _Z COM_HW          _Z       _T          _Z           IX
+    ## 5               _Z COM_HW          _Z       _T          _Z           IX
+    ## 6               _Z COM_HW          _Z       _T          _Z           IX
+    ##   prices transformation    obstime obsvalue
+    ## 1      V              N 2000-01-01 76.67950
+    ## 2      V              N 2001-01-01 78.19106
+    ## 3      V              N 2002-01-01 80.03906
+    ## 4      V              N 2003-01-01 81.76739
+    ## 5      V              N 2004-01-01 83.08288
+    ## 6      V              N 2005-01-01 85.37658
+
+To get a human-readable description of a series:
+
+``` r
+desc <- head(get_description("STS.A..N.UNEH.RTT000.4.AV3"), 3)
+strwrap(desc, width = 80)
+```
+
+    ## [1] "Austria - Standardised unemployment, Rate, Total (all ages), Total (male and"   
+    ## [2] "female); 3-year average; Eurostat; Neither seasonally nor working day adjusted,"
+    ## [3] "percentage of civilian workforce"                                               
+    ## [4] "Belgium - Standardised unemployment, Rate, Total (all ages), Total (male and"   
+    ## [5] "female); 3-year average; Eurostat; Neither seasonally nor working day adjusted,"
+    ## [6] "percentage of civilian workforce"                                               
+    ## [7] "Bulgaria - Standardised unemployment, Rate, Total (all ages), Total (male and"  
+    ## [8] "female); 3-year average; Eurostat; Neither seasonally nor working day adjusted,"
+    ## [9] "percentage of civilian workforce"
+
+We now join together the two data sets:
+
+``` r
+library(dplyr)
+```
+
+    ## 
+    ## Attaching package: 'dplyr'
+    ## 
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+    ## 
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
+``` r
+unemp <- unemp %>% select(ref_area, obstime, "unemp" = obsvalue)
+wages <- wages %>% select(ref_area, obstime, "wage" = obsvalue)
+
+df <- left_join(unemp, wages)
+```
+
+    ## Joining by: c("ref_area", "obstime")
+
+``` r
+head(df)
+```
+
+    ## Source: local data frame [6 x 4]
+    ## 
+    ##   ref_area    obstime unemp     wage
+    ##      (chr)     (date) (dbl)    (dbl)
+    ## 1       AT 2000-01-01  4.27 76.67950
+    ## 2       AT 2001-01-01  4.02 78.19106
+    ## 3       AT 2002-01-01  4.10 80.03906
+    ## 4       AT 2003-01-01  4.38 81.76739
+    ## 5       AT 2004-01-01  4.88 83.08288
+    ## 6       AT 2005-01-01  5.30 85.37658
+
+Finally, we plot the annual change in wages against the annual change in unemployment for all countries:
+
+``` r
+library(ggplot2)
+
+df %>% 
+  filter(complete.cases(.)) %>% 
+  group_by(ref_area) %>% 
+  mutate(d_wage = c(NA, diff(wage)) / lag(wage),
+         d_unemp = c(NA, diff(unemp))) %>% 
+  ggplot(aes(x = d_unemp, y = d_wage)) +
+  geom_point() +
+  facet_wrap(~ref_area, scales = "free") +
+  theme_bw(8) +
+  theme(strip.background = element_blank()) +
+  geom_smooth(method = "lm") +
+  labs(x = "\nAnnual change in unemployment", y = "Annual change in wages\n",
+       title = "Relationship between wages and unemployment\n")
+```
+
+![](vignettes/phillips_plot-1.png)
+
+At a first glance, most countries indeed seem to follow the prediction of a negative relationship between wages and unemployment.
 
 ### Disclaimer
 

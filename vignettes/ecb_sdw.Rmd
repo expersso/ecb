@@ -1,23 +1,22 @@
 ---
-output:
-  md_document:
-    variant: markdown_github
+title: "Programmatic access to the European Central Bank's Statistical Data Warehouse (SDW)"
+author: "Eric Persson"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r options, echo=FALSE}
-knitr::opts_chunk$set(fig.path = "vignettes/", fig.width = 6, fig.height = 5, 
+knitr::opts_chunk$set(fig.path = "", fig.width = 6, fig.height = 5, 
                       cache = FALSE, warning = FALSE)
 ```
 
 ### Introduction
 
 The `ecb` package package provides an `R` interface to the [European Central Bank's Statistical Data Warehouse](https://sdw.ecb.europa.eu/).
-
-To install the development version:
-```{r install, eval=FALSE}
-library(devtools)
-install_github("expersso/ecb")
-```
 
 ### Example usage
 
@@ -84,7 +83,7 @@ The easiest way to find and learn more about SDW series key is to browse the
 interested in, and applying the relevant filters (frequency, geographic area,
 etc), one can just copy the key:
 
-![screenshot](vignettes/screenshot.png)
+![screenshot](screenshot.png)
 
 The SDW website also has provides all the necessary metadata, so it is much 
 easier to explore data availability (in terms of available breakdowns, time 
@@ -103,7 +102,7 @@ headline inflation (`000000`) and core inflation (`XEF000`). Learning that e.g.
 `XEF000` corresponds to core inflation would be done by browsing the SDW
 website:
 
-![screenshot2](vignettes/screenshot2.png)
+![screenshot2](screenshot2.png)
 
 To remind oneself of what different values for different dimensions mean, one
 can use the `get_dimensions)` function, which returns a list of dataframes:

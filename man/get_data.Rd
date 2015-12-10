@@ -17,6 +17,47 @@ A data frame
 \description{
 Retrieve data from the ECB Statistical Data Warehouse API
 }
+\details{
+The \code{filter} option of \code{get_data()} takes a named list of key-value pairs.
+If left blank, it returns all data for the current version.
+
+Available filter parameters:
+
+\itemize{
+\item \code{startPeriod} & \code{endPeriod}
+ \itemize{
+   \item \code{YYYY} for annual data (e.g.: 2013)
+   \item \code{YYYY-S[1-2]} for semi-annual data (e.g.: 2013-S1)
+   \item \code{YYYY-Q[1-4]} for quarterly data (e.g.: 2013-Q1)
+   \item \code{YYYY-MM} for monthly data (e.g.: 2013-01)
+   \item \code{YYYY-W[01-53]} for weekly data (e.g.: 2013-W01)
+   \item \code{YYYY-MM-DD} for daily data (e.g.: 2013-01-01)
+   }
+\item \code{updatedAfter}
+ \itemize{
+   \item A timestamp to retrieve the latest version of changed values in the database since a certain point in time
+   \item Example: \code{filter = list(updatedAfter = 2009-05-15T14:15:00+01:00)}
+   }
+\item \code{firstNObservations} & \code{lastNObservations}
+ \itemize{
+   \item Example: \code{filter = list(firstNObservations = 12)} retrieves the first 12 observations of all specified series
+   }
+\item \code{detail}
+ \itemize{
+   \item Possible options: \code{full/dataonly/serieskeysonly/nodata}
+   \item \code{dataonly} is the default
+   \item Use \code{serieskeysonly} or \code{nodata} to list series that match a certain query, without returning the actual data
+   \item An alternative to using \code{serieskeys/nodata} is the convenience function \code{get_dimensions()}, which returns a list of dataframes with dimensions and explanations (see extended example below).
+   \item \code{full} returns both the series values and all metadata. This entails retrieving much more data than with the `dataonly` option.
+   }
+\item \code{includeHistory}
+ \itemize{
+   \item \code{false} (default) returns only version currently in production
+   \item \code{true} returns version currently in production, as well as all previous versions
+   }
+}
+See the \href{https://sdw-wsrest.ecb.europa.eu/}{SDW API} for more details.
+}
 \examples{
 # Get monthly data on annualized euro area headline HICP
 hicp <- get_data("ICP.M.U2.N.000000.4.ANR")
