@@ -38,7 +38,7 @@ ggplot(hicp, aes(x = obstime, y = obsvalue, color = title)) +
   geom_line() +
   facet_wrap(~ref_area, ncol = 3) +
   scale_y_continuous(breaks = pretty_breaks(5)) +
-  scale_x_date(date_labels = "%m-%Y", date_breaks = "1 month") +
+  scale_x_date(date_labels = "%m-%Y", date_breaks = "3 months") +
   theme_bw(8) +
   theme(legend.position = "bottom") +
   labs(x = NULL, y = "Percent per annum\n", color = NULL,
