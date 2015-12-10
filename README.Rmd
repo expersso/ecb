@@ -25,7 +25,7 @@ The following example extracts the last twelve observations of headline and
 See details below on how to use the `filter` parameter and how to find and use
 the SDW series keys.
 
-```{r example}
+```{r plot_example}
 library(ecb)
 library(ggplot2)
 

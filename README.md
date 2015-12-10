@@ -33,7 +33,7 @@ ggplot(hicp, aes(x = obstime, y = obsvalue, color = title)) +
        title = "HICP - headline and core\n")
 ```
 
-![](example-1.png)
+![](plot_example-1.png)
 
 ### Details
 
