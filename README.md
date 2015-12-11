@@ -18,14 +18,15 @@ library(ecb)
 library(ggplot2)
 
 key <- "ICP.M.DE+FR+ES+IT+NL+U2.N.000000+XEF000.4.ANR"
-filter <- list("lastNObservations" = 12, "detail" = "full")
+filter <- list(lastNObservations = 12, detail = "full")
 
 hicp <- get_data(key, filter)
+
+hicp$obstime <- convert_dates(hicp$obstime)
 
 ggplot(hicp, aes(x = obstime, y = obsvalue, color = title)) +
   geom_line() +
   facet_wrap(~ref_area, ncol = 3) +
-  scale_x_date(date_labels = "%m-%Y", date_breaks = "3 months") +
   theme_bw(8) +
   theme(legend.position = "bottom") +
   labs(x = NULL, y = "Percent per annum\n", color = NULL,
@@ -121,46 +122,35 @@ wages <- get_data("MNA.A.N..W2.S1.S1._Z.COM_HW._Z._T._Z.IX.V.N",
 head(unemp)
 ```
 
-    ##   freq ref_area adjustment sts_concept sts_class sts_institution
-    ## 1    A       AT          N        UNEH    RTT000               4
-    ## 2    A       AT          N        UNEH    RTT000               4
-    ## 3    A       AT          N        UNEH    RTT000               4
-    ## 4    A       AT          N        UNEH    RTT000               4
-    ## 5    A       AT          N        UNEH    RTT000               4
-    ## 6    A       AT          N        UNEH    RTT000               4
-    ##   sts_suffix    obstime obsvalue
-    ## 1        AV3 2000-01-01     4.27
-    ## 2        AV3 2001-01-01     4.02
-    ## 3        AV3 2002-01-01     4.10
-    ## 4        AV3 2003-01-01     4.38
-    ## 5        AV3 2004-01-01     4.88
-    ## 6        AV3 2005-01-01     5.30
+    ## Source: local data frame [6 x 9]
+    ## 
+    ##    freq ref_area adjustment sts_concept sts_class sts_institution
+    ##   (chr)    (chr)      (chr)       (chr)     (chr)           (chr)
+    ## 1     A       AT          N        UNEH    RTT000               4
+    ## 2     A       AT          N        UNEH    RTT000               4
+    ## 3     A       AT          N        UNEH    RTT000               4
+    ## 4     A       AT          N        UNEH    RTT000               4
+    ## 5     A       AT          N        UNEH    RTT000               4
+    ## 6     A       AT          N        UNEH    RTT000               4
+    ## Variables not shown: sts_suffix (chr), obstime (chr), obsvalue (dbl)
 
 ``` r
 head(wages)
 ```
 
-    ##   freq adjustment ref_area counterpart_area ref_sector counterpart_sector
-    ## 1    A          N       AT               W2         S1                 S1
-    ## 2    A          N       AT               W2         S1                 S1
-    ## 3    A          N       AT               W2         S1                 S1
-    ## 4    A          N       AT               W2         S1                 S1
-    ## 5    A          N       AT               W2         S1                 S1
-    ## 6    A          N       AT               W2         S1                 S1
-    ##   accounting_entry    sto instr_asset activity expenditure unit_measure
-    ## 1               _Z COM_HW          _Z       _T          _Z           IX
-    ## 2               _Z COM_HW          _Z       _T          _Z           IX
-    ## 3               _Z COM_HW          _Z       _T          _Z           IX
-    ## 4               _Z COM_HW          _Z       _T          _Z           IX
-    ## 5               _Z COM_HW          _Z       _T          _Z           IX
-    ## 6               _Z COM_HW          _Z       _T          _Z           IX
-    ##   prices transformation    obstime obsvalue
-    ## 1      V              N 2000-01-01 76.67950
-    ## 2      V              N 2001-01-01 78.19106
-    ## 3      V              N 2002-01-01 80.03906
-    ## 4      V              N 2003-01-01 81.76739
-    ## 5      V              N 2004-01-01 83.08288
-    ## 6      V              N 2005-01-01 85.37658
+    ## Source: local data frame [6 x 16]
+    ## 
+    ##    freq adjustment ref_area counterpart_area ref_sector counterpart_sector
+    ##   (chr)      (chr)    (chr)            (chr)      (chr)              (chr)
+    ## 1     A          N       AT               W2         S1                 S1
+    ## 2     A          N       AT               W2         S1                 S1
+    ## 3     A          N       AT               W2         S1                 S1
+    ## 4     A          N       AT               W2         S1                 S1
+    ## 5     A          N       AT               W2         S1                 S1
+    ## 6     A          N       AT               W2         S1                 S1
+    ## Variables not shown: accounting_entry (chr), sto (chr), instr_asset (chr),
+    ##   activity (chr), expenditure (chr), unit_measure (chr), prices (chr),
+    ##   transformation (chr), obstime (chr), obsvalue (dbl)
 
 To get a human-readable description of a series:
 
@@ -169,13 +159,13 @@ desc <- head(get_description("STS.A..N.UNEH.RTT000.4.AV3"), 3)
 strwrap(desc, width = 80)
 ```
 
-    ## [1] "Austria - Standardised unemployment, Rate, Total (all ages), Total (male and"   
+    ## [1] "Estonia - Standardised unemployment, Rate, Total (all ages), Total (male and"   
     ## [2] "female); 3-year average; Eurostat; Neither seasonally nor working day adjusted,"
     ## [3] "percentage of civilian workforce"                                               
-    ## [4] "Belgium - Standardised unemployment, Rate, Total (all ages), Total (male and"   
+    ## [4] "Poland - Standardised unemployment, Rate, Total (all ages), Total (male and"    
     ## [5] "female); 3-year average; Eurostat; Neither seasonally nor working day adjusted,"
     ## [6] "percentage of civilian workforce"                                               
-    ## [7] "Bulgaria - Standardised unemployment, Rate, Total (all ages), Total (male and"  
+    ## [7] "Italy - Standardised unemployment, Rate, Total (all ages), Total (male and"     
     ## [8] "female); 3-year average; Eurostat; Neither seasonally nor working day adjusted,"
     ## [9] "percentage of civilian workforce"
 
@@ -183,20 +173,7 @@ We now join together the two data sets:
 
 ``` r
 library(dplyr)
-```
 
-    ## 
-    ## Attaching package: 'dplyr'
-    ## 
-    ## The following objects are masked from 'package:stats':
-    ## 
-    ##     filter, lag
-    ## 
-    ## The following objects are masked from 'package:base':
-    ## 
-    ##     intersect, setdiff, setequal, union
-
-``` r
 unemp <- unemp %>% select(ref_area, obstime, "unemp" = obsvalue)
 wages <- wages %>% select(ref_area, obstime, "wage" = obsvalue)
 
@@ -211,14 +188,14 @@ head(df)
 
     ## Source: local data frame [6 x 4]
     ## 
-    ##   ref_area    obstime unemp     wage
-    ##      (chr)     (date) (dbl)    (dbl)
-    ## 1       AT 2000-01-01  4.27 76.67950
-    ## 2       AT 2001-01-01  4.02 78.19106
-    ## 3       AT 2002-01-01  4.10 80.03906
-    ## 4       AT 2003-01-01  4.38 81.76739
-    ## 5       AT 2004-01-01  4.88 83.08288
-    ## 6       AT 2005-01-01  5.30 85.37658
+    ##   ref_area obstime unemp     wage
+    ##      (chr)   (chr) (dbl)    (dbl)
+    ## 1       AT    2000  4.27 76.67950
+    ## 2       AT    2001  4.02 78.19106
+    ## 3       AT    2002  4.10 80.03906
+    ## 4       AT    2003  4.38 81.76739
+    ## 5       AT    2004  4.88 83.08288
+    ## 6       AT    2005  5.30 85.37658
 
 Finally, we plot the annual change in wages against the annual change in unemployment for all countries:
 

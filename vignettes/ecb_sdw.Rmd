@@ -30,14 +30,15 @@ library(ecb)
 library(ggplot2)
 
 key <- "ICP.M.DE+FR+ES+IT+NL+U2.N.000000+XEF000.4.ANR"
-filter <- list("lastNObservations" = 12, "detail" = "full")
+filter <- list(lastNObservations = 12, detail = "full")
 
 hicp <- get_data(key, filter)
+
+hicp$obstime <- convert_dates(hicp$obstime)
 
 ggplot(hicp, aes(x = obstime, y = obsvalue, color = title)) +
   geom_line() +
   facet_wrap(~ref_area, ncol = 3) +
-  scale_x_date(date_labels = "%m-%Y", date_breaks = "3 months") +
   theme_bw(8) +
   theme(legend.position = "bottom") +
   labs(x = NULL, y = "Percent per annum\n", color = NULL,

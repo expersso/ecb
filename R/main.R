@@ -8,17 +8,15 @@
 #' head(df)
 get_dataflows <- function() {
 
-  url <- "https://sdw-wsrest.ecb.europa.eu/service/dataflow"
+  query_url <- "https://sdw-wsrest.ecb.europa.eu/service/dataflow"
 
-#   response <- httr::GET(url, httr::add_headers(
-#     "Accept" = "application/vnd.sdmx.structure+xml;version=2.1"))
-#
-#   content <- httr::content(response, "raw")
+  req <- make_request(query_url, "metadata")
 
-  page <- xml2::read_xml(url, verbose = TRUE)
-  ecb_ns <- xml2::xml_ns(page) # xml namespace
+  res <- xml2::read_xml(httr::content(req, "text"), verbose = TRUE)
 
-  data_flows_nodes <- xml2::xml_find_all(page, "//str:Dataflow", ecb_ns)
+  ecb_ns <- xml2::xml_ns(res) # xml namespace
+
+  data_flows_nodes <- xml2::xml_find_all(res, "//str:Dataflow", ecb_ns)
   name_nodes <- xml2::xml_find_all(xml2::xml_children(data_flows_nodes),
                                    "//com:Name", ecb_ns)
 
@@ -27,33 +25,6 @@ get_dataflows <- function() {
 
   df <- data.frame(flow_ref, title, stringsAsFactors = FALSE)
   structure(df, class = c("tbl_df", "tbl", "data.frame"))
-}
-
-create_query_url <- function(key, filter = NULL) {
-
-  url <- "https://sdw-wsrest.ecb.europa.eu/service/data"
-
-  # Get flow reference (= dataset abbreviation, e.g. ICP or BOP)
-  flow_ref <- regmatches(key, regexpr("^[[:alnum:]]+", key))
-  key_q <- regmatches(key, regexpr("^[[:alnum:]]+\\.", key),
-                      invert = TRUE)[[1]][2]
-
-  if(any(names(filter) == "")) {
-    stop("All filter parameters must be named!")
-  }
-
-  if("updatedAfter" %in% names(filter)) {
-    filter$updatedAfter <- curl::curl_escape(filter$updatedAfter)
-  }
-
-  # Create parameter part of query string
-  names <- curl::curl_escape(names(filter))
-  values <- curl::curl_escape(as.character(filter))
-  query <- paste0(names, "=", values, collapse = "&")
-  query <- paste0("?", query)
-
-  query_url <- paste(url, flow_ref, key_q, query, sep = "/")
-  query_url
 }
 
 #' Retrieve data from the ECB Statistical Data Warehouse API
@@ -121,30 +92,19 @@ get_data <- function(key, filter = NULL) {
 
   query_url <- create_query_url(key, filter = filter)
 
-  result <- rsdmx::readSDMX(query_url)
+  req <- make_request(query_url, "data")
+
+  tmp <- tempfile()
+  writeLines(httr::content(req, "text"), tmp)
+
+  result <- rsdmx::readSDMX(tmp, FALSE)
+
+  unlink(tmp)
 
   df <- as.data.frame(result)
   df <- structure(df,
                   class = c("tbl_df", "tbl", "data.frame"),
                   names = tolower(names(df)))
-
-  # Parse annual obstime
-  if(grepl("^[0-9]{4}$", df$obstime[1])) {
-    df$obstime <- paste0(df$obstime, "-01-01")
-    df$obstime <- as.Date(df$obstime, "%Y-%m-%d")
-  }
-
-  # Parse monthly obstime
-  if(grepl("^[0-9]{4}-[0-9]{2}$", df$obstime[1])) {
-    df$obstime <- paste0(df$obstime, "-01")
-    df$obstime <- as.Date(df$obstime, "%Y-%m-%d")
-  }
-
-  # Parse daily obstime
-  if(grepl("^[0-9]{4}-[0-9]{2}-[0-9]{2}$", df$obstime[1])) {
-    df$obstime <- as.Date(df$obstime, "%Y-%m-%d")
-  }
-
   df
 }
 
@@ -165,7 +125,10 @@ get_dimensions <- function(key) {
   # Used in creating names (series_names) below
   flow_ref <- regmatches(key, regexpr("^[[:alnum:]]+", key))
 
-  skeys <- xml2::read_xml(query_url, verbose = TRUE)
+  req <- make_request(query_url, "metadata")
+
+  skeys <- xml2::read_xml(httr::content(req, "text"), verbose = TRUE)
+
   skeys_ns <- xml2::xml_ns(skeys) # xml namespace
 
   series <- xml2::xml_find_all(skeys, "//generic:Series", skeys_ns)
@@ -205,4 +168,76 @@ get_dimensions <- function(key) {
 get_description <- function(key) {
   vapply(get_dimensions(key), function(x) x$value[x$dim == "TITLE_COMPL"],
          character(1))
+}
+
+#' Format date variable retrieved from the SDW into a proper date variable
+#'
+#' @param x A vector of dates
+#'
+#' @return A date-formatted vector
+#' @export
+#'
+#' @examples
+#' hicp <- get_data("ICP.M.U2.N.000000.4.ANR")
+#' hicp$obstime <- convert_dates(hicp$obstime)
+#' str(hicp)
+convert_dates <- function(x) {
+
+  if(grepl("^[0-9]{4}$", x[1])) {
+    return(as.Date(paste0(x, "-01-01"), "%Y-%m-%d"))
+  }
+
+  if(grepl("^[0-9]{4}-[0-9]{2}$", x[1])) {
+    return(as.Date(paste0(x, "-01"), "%Y-%m-%d"))
+  }
+
+  if(grepl("^[0-9]{4}-[0-9]{2}-[0-9]{2}$", x[1])) {
+    return(as.Date(x, "%Y-%m-%d"))
+  }
+}
+
+create_query_url <- function(key, filter = NULL) {
+
+  url <- "https://sdw-wsrest.ecb.europa.eu/service/data"
+
+  # Get flow reference (= dataset abbreviation, e.g. ICP or BOP)
+  flow_ref <- regmatches(key, regexpr("^[[:alnum:]]+", key))
+  key_q <- regmatches(key, regexpr("^[[:alnum:]]+\\.", key),
+                      invert = TRUE)[[1]][2]
+
+  if(any(names(filter) == "")) {
+    stop("All filter parameters must be named!")
+  }
+
+  if("updatedAfter" %in% names(filter)) {
+    filter$updatedAfter <- curl::curl_escape(filter$updatedAfter)
+  }
+
+  # Create parameter part of query string
+  names <- curl::curl_escape(names(filter))
+  values <- curl::curl_escape(as.character(filter))
+  query <- paste0(names, "=", values, collapse = "&")
+  query <- paste0("?", query)
+
+  query_url <- paste(url, flow_ref, key_q, query, sep = "/")
+  query_url
+}
+
+check_status <- function(req) {
+  if(req$status_code >= 400)
+    stop("HTTP failure: ", req$status_code, "\n", httr::content(req, "text"))
+}
+
+make_request <- function(query_url, header_type) {
+
+  accept_headers <-
+    c("metadata" = "application/vnd.sdmx.genericdata+xml;version=2.1",
+      "data" = "application/vnd.sdmx.structurespecificdata+xml;version=2.1")
+
+  req <- httr::GET(query_url, httr::add_headers(
+    "Accept" = accept_headers[header_type],
+    "Accept-Encoding" = "gzip, deflate"))
+
+  check_status(req)
+  req
 }
