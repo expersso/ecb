@@ -4,6 +4,11 @@ output:
     variant: markdown_github
 ---
 
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/ecb)](http://cran.r-project.org/package=ecb)
+[![Travis-CI Build Status](https://travis-ci.org/NA/NA.svg?branch=master)](https://travis-ci.org/expersso/ecb)
+[![Coverage Status](https://img.shields.io/codecov/c/github/NA/NA/master.svg)](https://codecov.io/github/expersso/ecb?branch=master)
+[![](http://cranlogs.r-pkg.org/badges/grand-total/ecb)](http://cran.r-project.org/web/packages/ecb)
+
 ```{r options, echo=FALSE}
 knitr::opts_chunk$set(fig.path = "vignettes/", fig.width = 6, fig.height = 5, 
                       cache = FALSE, warning = FALSE)

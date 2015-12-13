@@ -14,7 +14,8 @@ LazyData: TRUE
 Suggests: knitr,
     rmarkdown,
     dplyr,
-    ggplot2
+    ggplot2,
+    testthat
 Imports: curl,
     rsdmx,
     xml2,
