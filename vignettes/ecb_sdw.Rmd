@@ -71,7 +71,7 @@ Available filter parameters:
     * Use `serieskeysonly` or `nodata` to list series that match a certain query, without returning the actual data
     * An alternative to using `serieskeys/nodata` is the convenience function `get_dimensions()`, which returns a list of dataframes with dimensions and explanations (see extended example below). 
     * `full` returns both the series values and all metadata. This entails retrieving much more data than with the `dataonly` option.
-* `includeHistory`
+* `includeHistory` (not currently implemented)
     * `false` (default) returns only version currently in production
     * `true` returns version currently in production, as well as all previous versions
 

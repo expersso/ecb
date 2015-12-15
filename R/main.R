@@ -65,7 +65,7 @@ get_dataflows <- function() {
 #'    \item An alternative to using \code{serieskeys/nodata} is the convenience function \code{get_dimensions()}, which returns a list of dataframes with dimensions and explanations (see extended example below).
 #'    \item \code{full} returns both the series values and all metadata. This entails retrieving much more data than with the `dataonly` option.
 #'    }
-#' \item \code{includeHistory}
+#' \item \code{includeHistory} (not currently implemented)
 #'  \itemize{
 #'    \item \code{false} (default) returns only version currently in production
 #'    \item \code{true} returns version currently in production, as well as all previous versions
