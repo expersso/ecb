@@ -116,7 +116,7 @@ can use the `get_dimensions)` function, which returns a list of dataframes:
 
 ```{r get_dimensions_example}
 dims <- get_dimensions("ICP.M.DE.N.000000+XEF000.4.ANR")
-dims[[1]]
+head(dims[[1]], 8)
 ```
 
 ### Extended example

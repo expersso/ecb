@@ -87,37 +87,18 @@ To remind oneself of what different values for different dimensions mean, one ca
 
 ``` r
 dims <- get_dimensions("ICP.M.DE.N.000000+XEF000.4.ANR")
-dims[[1]]
+head(dims[[1]], 8)
 ```
 
-    ##                dim
-    ## 1             FREQ
-    ## 2         REF_AREA
-    ## 3       ADJUSTMENT
-    ## 4         ICP_ITEM
-    ## 5  STS_INSTITUTION
-    ## 6       ICP_SUFFIX
-    ## 7       COLLECTION
-    ## 8            TITLE
-    ## 9         DECIMALS
-    ## 10     TITLE_COMPL
-    ## 11            UNIT
-    ## 12       UNIT_MULT
-    ## 13     DOM_SER_IDS
-    ##                                                                                                           value
-    ## 1                                                                                                             M
-    ## 2                                                                                                            DE
-    ## 3                                                                                                             N
-    ## 4                                                                                                        000000
-    ## 5                                                                                                             4
-    ## 6                                                                                                           ANR
-    ## 7                                                                                                             A
-    ## 8                                                                                          HICP - Overall index
-    ## 9                                                                                                             1
-    ## 10 Germany - HICP - Overall index, Annual rate of change, Eurostat, Neither seasonally nor working day adjusted
-    ## 11                                                                                                         PCCH
-    ## 12                                                                                                            0
-    ## 13                                                                                      ICPT.M.VAL.ANR05.DEU.00
+    ##               dim                value
+    ## 1            FREQ                    M
+    ## 2        REF_AREA                   DE
+    ## 3      ADJUSTMENT                    N
+    ## 4        ICP_ITEM               000000
+    ## 5 STS_INSTITUTION                    4
+    ## 6      ICP_SUFFIX                  ANR
+    ## 7      COLLECTION                    A
+    ## 8           TITLE HICP - Overall index
 
 ### Extended example
 
