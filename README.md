@@ -46,15 +46,15 @@ The `filter` option of `get_data()` takes a named list of key-value pairs. If le
 Available filter parameters:
 
 -   `startPeriod` & `endPeriod`
-    -   `YYYY` for annual data (e.g.: 2013)
-    -   `YYYY-S[1-2]` for semi-annual data (e.g.: 2013-S1)
-    -   `YYYY-Q[1-4]` for quarterly data (e.g.: 2013-Q1)
-    -   `YYYY-MM` for monthly data (e.g.: 2013-01)
-    -   `YYYY-W[01-53]` for weekly data (e.g.: 2013-W01)
-    -   `YYYY-MM-DD` for daily data (e.g.: 2013-01-01)
+    -   `YYYY` for annual data (e.g. 2013)
+    -   `YYYY-S[1-2]` for semi-annual data (e.g. 2013-S1)
+    -   `YYYY-Q[1-4]` for quarterly data (e.g. 2013-Q1)
+    -   `YYYY-MM` for monthly data (e.g. 2013-01)
+    -   `YYYY-W[01-53]` for weekly data (e.g. 2013-W01)
+    -   `YYYY-MM-DD` for daily data (e.g. 2013-01-01)
 -   `updatedAfter`
     -   A timestamp to retrieve the latest version of changed values in the database since a certain point in time
--   Example: `filter = list(updatedAfter = 2009-05-15T14:15:00+01:00)`
+    -   Example: `filter = list(updatedAfter = 2009-05-15T14:15:00+01:00)`
 -   `firstNObservations` & `lastNObservations`
     -   Example: `filter = list(firstNObservations = 12)` retrieves the first 12 observations of all specified series
 -   `detail`
@@ -87,26 +87,37 @@ To remind oneself of what different values for different dimensions mean, one ca
 
 ``` r
 dims <- get_dimensions("ICP.M.DE.N.000000+XEF000.4.ANR")
-lapply(dims, head)
+dims[[1]]
 ```
 
-    ## $ICP.M.DE.N.000000.4.ANR
-    ##               dim  value
-    ## 1            FREQ      M
-    ## 2        REF_AREA     DE
-    ## 3      ADJUSTMENT      N
-    ## 4        ICP_ITEM 000000
-    ## 5 STS_INSTITUTION      4
-    ## 6      ICP_SUFFIX    ANR
-    ## 
-    ## $ICP.M.DE.N.XEF000.4.ANR
-    ##               dim  value
-    ## 1            FREQ      M
-    ## 2        REF_AREA     DE
-    ## 3      ADJUSTMENT      N
-    ## 4        ICP_ITEM XEF000
-    ## 5 STS_INSTITUTION      4
-    ## 6      ICP_SUFFIX    ANR
+    ##                dim
+    ## 1             FREQ
+    ## 2         REF_AREA
+    ## 3       ADJUSTMENT
+    ## 4         ICP_ITEM
+    ## 5  STS_INSTITUTION
+    ## 6       ICP_SUFFIX
+    ## 7       COLLECTION
+    ## 8            TITLE
+    ## 9         DECIMALS
+    ## 10     TITLE_COMPL
+    ## 11            UNIT
+    ## 12       UNIT_MULT
+    ## 13     DOM_SER_IDS
+    ##                                                                                                           value
+    ## 1                                                                                                             M
+    ## 2                                                                                                            DE
+    ## 3                                                                                                             N
+    ## 4                                                                                                        000000
+    ## 5                                                                                                             4
+    ## 6                                                                                                           ANR
+    ## 7                                                                                                             A
+    ## 8                                                                                          HICP - Overall index
+    ## 9                                                                                                             1
+    ## 10 Germany - HICP - Overall index, Annual rate of change, Eurostat, Neither seasonally nor working day adjusted
+    ## 11                                                                                                         PCCH
+    ## 12                                                                                                            0
+    ## 13                                                                                      ICPT.M.VAL.ANR05.DEU.00
 
 ### Extended example
 

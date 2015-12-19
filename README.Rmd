@@ -60,15 +60,15 @@ If left blank, it returns all data for the current version.
 Available filter parameters:
 
 * `startPeriod` & `endPeriod`
-    * `YYYY` for annual data (e.g.: 2013)
-    * `YYYY-S[1-2]` for semi-annual data (e.g.: 2013-S1)
-    * `YYYY-Q[1-4]` for quarterly data (e.g.: 2013-Q1)
-    * `YYYY-MM` for monthly data (e.g.: 2013-01)
-    * `YYYY-W[01-53]` for weekly data (e.g.: 2013-W01)
-    * `YYYY-MM-DD` for daily data (e.g.: 2013-01-01)
+    * `YYYY` for annual data (e.g. 2013)
+    * `YYYY-S[1-2]` for semi-annual data (e.g. 2013-S1)
+    * `YYYY-Q[1-4]` for quarterly data (e.g. 2013-Q1)
+    * `YYYY-MM` for monthly data (e.g. 2013-01)
+    * `YYYY-W[01-53]` for weekly data (e.g. 2013-W01)
+    * `YYYY-MM-DD` for daily data (e.g. 2013-01-01)
 * `updatedAfter`
     * A timestamp to retrieve the latest version of changed values in the database since a certain point in time
-   * Example: `filter = list(updatedAfter = 2009-05-15T14:15:00+01:00)`
+    * Example: `filter = list(updatedAfter = 2009-05-15T14:15:00+01:00)`
 * `firstNObservations` & `lastNObservations`
     * Example: `filter = list(firstNObservations = 12)` retrieves the first 12 observations of all specified series
 * `detail`
@@ -116,7 +116,7 @@ can use the `get_dimensions)` function, which returns a list of dataframes:
 
 ```{r get_dimensions_example}
 dims <- get_dimensions("ICP.M.DE.N.000000+XEF000.4.ANR")
-lapply(dims, head)
+dims[[1]]
 ```
 
 ### Extended example
