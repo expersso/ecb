@@ -176,6 +176,7 @@ get_description <- function(key) {
 #'
 #' @return A date-formatted vector
 #' @export
+#' @importFrom zoo as.yearqtr
 #'
 #' @examples
 #' hicp <- get_data("ICP.M.U2.N.000000.4.ANR")
@@ -194,6 +195,13 @@ convert_dates <- function(x) {
   if(grepl("^[0-9]{4}-[0-9]{2}-[0-9]{2}$", x[1])) {
     return(as.Date(x, "%Y-%m-%d"))
   }
+  if(grepl("^[0-9]{4}-Q[1-4]{1}$", x[1])) {
+    # Quarterly data
+    x <- sub("Q", "", x)
+    return(as.Date(zoo::as.yearqtr(x)))
+  }
+  warning("Could not convert dates - format unknown.")
+  x
 }
 
 create_query_url <- function(key, filter = NULL) {
