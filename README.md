@@ -1,4 +1,4 @@
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/ecb)](http://cran.r-project.org/package=ecb) [![Travis-CI Build Status](https://travis-ci.org/expersso/ecb.svg?branch=master)](https://travis-ci.org/expersso/ecb) [![Coverage Status](https://img.shields.io/codecov/c/github/expersso/ecb/master.svg)](https://codecov.io/github/expersso/ecb?branch=master) [![Cranlogs Downloads](http://cranlogs.r-pkg.org/badges/grand-total/ecb)](http://cran.r-project.org/web/packages/ecb)
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/ecb)](http://cran.r-project.org/package=ecb) [![Travis-CI Build Status](https://travis-ci.org/expersso/ecb.svg?branch=master)](https://travis-ci.org/expersso/ecb) [![Coverage Status](https://img.shields.io/codecov/c/github/expersso/ecb/master.svg)](https://codecov.io/github/expersso/ecb?branch=master) [![Cranlogs Downloads](http://cranlogs.r-pkg.org/badges/grand-total/ecb)](http://cran.r-project.org/package=ecb)
 
 ### Introduction
 
@@ -35,7 +35,7 @@ ggplot(hicp, aes(x = obstime, y = obsvalue, color = title)) +
        title = "HICP - headline and core\n")
 ```
 
-![](vignettes/hicp_plot-1.png)
+![](vignettes/hicp_plot-1.png)<!-- -->
 
 ### Details
 
@@ -90,15 +90,15 @@ dims <- get_dimensions("ICP.M.DE.N.000000+XEF000.4.ANR")
 head(dims[[1]], 8)
 ```
 
-    ##               dim                value
-    ## 1            FREQ                    M
-    ## 2        REF_AREA                   DE
-    ## 3      ADJUSTMENT                    N
-    ## 4        ICP_ITEM               000000
-    ## 5 STS_INSTITUTION                    4
-    ## 6      ICP_SUFFIX                  ANR
-    ## 7      COLLECTION                    A
-    ## 8           TITLE HICP - Overall index
+    ##               dim  value
+    ## 1            FREQ      M
+    ## 2        REF_AREA     DE
+    ## 3      ADJUSTMENT      N
+    ## 4        ICP_ITEM 000000
+    ## 5 STS_INSTITUTION      4
+    ## 6      ICP_SUFFIX    ANR
+    ## 7        DECIMALS      1
+    ## 8       UNIT_MULT      0
 
 ### Extended example
 
@@ -116,35 +116,46 @@ wages <- get_data("MNA.A.N..W2.S1.S1._Z.COM_HW._Z._T._Z.IX.V.N",
 head(unemp)
 ```
 
-    ## Source: local data frame [6 x 9]
-    ## 
-    ##    freq ref_area adjustment sts_concept sts_class sts_institution
-    ##   (chr)    (chr)      (chr)       (chr)     (chr)           (chr)
-    ## 1     A       AT          N        UNEH    RTT000               4
-    ## 2     A       AT          N        UNEH    RTT000               4
-    ## 3     A       AT          N        UNEH    RTT000               4
-    ## 4     A       AT          N        UNEH    RTT000               4
-    ## 5     A       AT          N        UNEH    RTT000               4
-    ## 6     A       AT          N        UNEH    RTT000               4
-    ## Variables not shown: sts_suffix (chr), obstime (chr), obsvalue (dbl)
+    ##   freq ref_area adjustment sts_concept sts_class sts_institution
+    ## 1    A       AT          N        UNEH    RTT000               4
+    ## 2    A       AT          N        UNEH    RTT000               4
+    ## 3    A       AT          N        UNEH    RTT000               4
+    ## 4    A       AT          N        UNEH    RTT000               4
+    ## 5    A       AT          N        UNEH    RTT000               4
+    ## 6    A       AT          N        UNEH    RTT000               4
+    ##   sts_suffix obstime obsvalue
+    ## 1        AV3    2000     4.27
+    ## 2        AV3    2001     4.02
+    ## 3        AV3    2002     4.10
+    ## 4        AV3    2003     4.38
+    ## 5        AV3    2004     4.88
+    ## 6        AV3    2005     5.30
 
 ``` r
 head(wages)
 ```
 
-    ## Source: local data frame [6 x 16]
-    ## 
-    ##    freq adjustment ref_area counterpart_area ref_sector counterpart_sector
-    ##   (chr)      (chr)    (chr)            (chr)      (chr)              (chr)
-    ## 1     A          N       AT               W2         S1                 S1
-    ## 2     A          N       AT               W2         S1                 S1
-    ## 3     A          N       AT               W2         S1                 S1
-    ## 4     A          N       AT               W2         S1                 S1
-    ## 5     A          N       AT               W2         S1                 S1
-    ## 6     A          N       AT               W2         S1                 S1
-    ## Variables not shown: accounting_entry (chr), sto (chr), instr_asset (chr),
-    ##   activity (chr), expenditure (chr), unit_measure (chr), prices (chr),
-    ##   transformation (chr), obstime (chr), obsvalue (dbl)
+    ##   freq adjustment ref_area counterpart_area ref_sector counterpart_sector
+    ## 1    A          N       AT               W2         S1                 S1
+    ## 2    A          N       AT               W2         S1                 S1
+    ## 3    A          N       AT               W2         S1                 S1
+    ## 4    A          N       AT               W2         S1                 S1
+    ## 5    A          N       AT               W2         S1                 S1
+    ## 6    A          N       AT               W2         S1                 S1
+    ##   accounting_entry    sto instr_asset activity expenditure unit_measure
+    ## 1               _Z COM_HW          _Z       _T          _Z           IX
+    ## 2               _Z COM_HW          _Z       _T          _Z           IX
+    ## 3               _Z COM_HW          _Z       _T          _Z           IX
+    ## 4               _Z COM_HW          _Z       _T          _Z           IX
+    ## 5               _Z COM_HW          _Z       _T          _Z           IX
+    ## 6               _Z COM_HW          _Z       _T          _Z           IX
+    ##   prices transformation obstime obsvalue
+    ## 1      V              N    2000 76.67950
+    ## 2      V              N    2001 78.19106
+    ## 3      V              N    2002 80.03906
+    ## 4      V              N    2003 81.76739
+    ## 5      V              N    2004 83.08288
+    ## 6      V              N    2005 85.37658
 
 To get a human-readable description of a series:
 
@@ -167,7 +178,20 @@ We now join together the two data sets:
 
 ``` r
 library(dplyr)
+```
 
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
+``` r
 unemp <- unemp %>% select(ref_area, obstime, "unemp" = obsvalue)
 wages <- wages %>% select(ref_area, obstime, "wage" = obsvalue)
 
@@ -211,7 +235,7 @@ df %>%
        title = "Relationship between wages and unemployment\n")
 ```
 
-![](vignettes/phillips_plot-1.png)
+![](vignettes/phillips_plot-1.png)<!-- -->
 
 At a first glance, most countries indeed seem to follow the prediction of a negative relationship between wages and unemployment.
 

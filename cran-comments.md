@@ -1,10 +1,10 @@
 ## Test environments
 * Windows 7
+* Winbuilder (release and dev)
+* Ubuntu 14.04
 
 ## R CMD check results
 There were no ERRORs or WARNINGs. 
 
 ## Second submission
-
-* Fix Title Case in package title
-* Remove calls relying on 'scales' package in vignette
+* Changed URL in readme.md to canonical URL (and added to buildignore)

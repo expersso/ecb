@@ -25,10 +25,12 @@ The following example extracts the last twelve observations of headline and
 See details below on how to use the `filter` parameter and how to find and use
 the SDW series keys.
 
-```{r hicp_plot}
+```{r}
 library(ecb)
 library(ggplot2)
+```
 
+```{r hicp_plot, eval=FALSE}
 key <- "ICP.M.DE+FR+ES+IT+NL+U2.N.000000+XEF000.4.ANR"
 filter <- list(lastNObservations = 12, detail = "full")
 
@@ -145,7 +147,7 @@ strwrap(desc, width = 80)
 We now join together the two data sets:
 
 ```{r join_data}
-library(dplyr)
+suppressPackageStartupMessages(library(dplyr))
 
 unemp <- unemp %>% select(ref_area, obstime, "unemp" = obsvalue)
 wages <- wages %>% select(ref_area, obstime, "wage" = obsvalue)

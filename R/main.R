@@ -95,7 +95,7 @@ get_data <- function(key, filter = NULL) {
   req <- make_request(query_url, "data")
 
   tmp <- tempfile()
-  writeLines(httr::content(req, "text"), tmp)
+  writeLines(httr::content(req, "text", encoding = "utf-8"), tmp)
 
   result <- rsdmx::readSDMX(tmp, FALSE)
 
@@ -127,7 +127,8 @@ get_dimensions <- function(key) {
 
   req <- make_request(query_url, "metadata")
 
-  skeys <- xml2::read_xml(httr::content(req, "text"), verbose = TRUE)
+  skeys <- xml2::read_xml(httr::content(req, "text", encoding = "utf-8"),
+                          verbose = TRUE)
 
   skeys_ns <- xml2::xml_ns(skeys) # xml namespace
 
