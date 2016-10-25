@@ -198,7 +198,8 @@ convert_dates <- function(x) {
     # Quarterly data
     x <- sub("Q", "", x)
     stopifnot(requireNamespace("zoo", quietly = TRUE))
-    return(as.Date(zoo::as.yearqtr(x)))
+    # frace = 1 for end-of-quarter dates
+    return(zoo::as.Date(zoo::as.yearqtr(x), frac = 1))
   }
   warning("Could not convert dates - format unknown.")
   x
