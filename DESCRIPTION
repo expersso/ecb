@@ -19,5 +19,6 @@ Suggests: knitr,
 Imports: curl,
     rsdmx,
     xml2,
-    httr
+    httr,
+    zoo
 VignetteBuilder: knitr

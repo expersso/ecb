@@ -176,7 +176,6 @@ get_description <- function(key) {
 #'
 #' @return A date-formatted vector
 #' @export
-#' @importFrom zoo as.yearqtr
 #'
 #' @examples
 #' hicp <- get_data("ICP.M.U2.N.000000.4.ANR")
