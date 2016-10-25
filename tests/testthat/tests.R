@@ -35,3 +35,14 @@ test_that("get_description returns a character vector", {
   desc_lengths <- vapply(desc, nchar, numeric(1))
   expect_true(all(desc > 0))
 })
+
+test_that("quartlery date conversion works", {
+  key <- "MNA.Q.Y.DE.W2.S1.S1.B.B1GQ._Z._Z._Z.EUR.LR.N"
+  gdp <- get_data(key)
+  gdp_dates <- convert_dates(gdp$obstime)
+  expect_is(gdp_dates, "Date")
+  # correct format
+  expect_false(anyNA(as.Date(as.character(gdp_dates), format = "%Y-%m-%d")))
+  # end of quarter
+  expect_true(all(grepl(pattern = "-(30|31)", gdp_dates)))
+})
