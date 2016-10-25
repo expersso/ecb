@@ -15,10 +15,11 @@ Suggests: knitr,
     rmarkdown,
     dplyr,
     ggplot2,
-    testthat
-Imports: curl,
+    testthat,
+    zoo
+Imports:
+    curl,
     rsdmx,
     xml2,
-    httr,
-    zoo
+    httr
 VignetteBuilder: knitr

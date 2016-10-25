@@ -197,6 +197,7 @@ convert_dates <- function(x) {
   if(grepl("^[0-9]{4}-Q[1-4]{1}$", x[1])) {
     # Quarterly data
     x <- sub("Q", "", x)
+    stopifnot(requireNamespace("zoo", quietly = TRUE))
     return(as.Date(zoo::as.yearqtr(x)))
   }
   warning("Could not convert dates - format unknown.")
