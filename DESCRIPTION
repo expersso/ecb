@@ -17,8 +17,7 @@ Suggests: knitr,
     ggplot2,
     testthat,
     zoo
-Imports:
-    curl,
+Imports: curl,
     rsdmx,
     xml2,
     httr
