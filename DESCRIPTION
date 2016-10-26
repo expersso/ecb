@@ -17,10 +17,10 @@ Suggests:
     rmarkdown,
     dplyr,
     ggplot2,
-    testthat
+    testthat,
+    zoo
 Imports:
     curl,
-    zoo,
     rsdmx,
     xml2,
     httr
