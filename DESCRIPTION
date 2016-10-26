@@ -2,8 +2,8 @@ Package: ecb
 Type: Package
 Title: Programmatic Access to the European Central Bank's Statistical Data
     Warehouse (SDW)
-Version: 0.2
-Date: 2016-03-17
+Version: 0.3
+Date: 2016-10-26
 Authors@R: person("Eric", "Persson", email = "expersso5@gmail.com",
     role = c("aut", "cre"))
 Description: Provides an interface to the European Central Bank's Statistical
@@ -20,6 +20,7 @@ Suggests:
     testthat
 Imports:
     curl,
+    zoo,
     rsdmx,
     xml2,
     httr

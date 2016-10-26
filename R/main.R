@@ -184,17 +184,30 @@ get_description <- function(key) {
 #' str(hicp)
 convert_dates <- function(x) {
 
+  # Annual
   if(grepl("^[0-9]{4}$", x[1])) {
     return(as.Date(paste0(x, "-01-01"), "%Y-%m-%d"))
   }
 
+  # Monthly
   if(grepl("^[0-9]{4}-[0-9]{2}$", x[1])) {
     return(as.Date(paste0(x, "-01"), "%Y-%m-%d"))
   }
 
+  # Monthly
   if(grepl("^[0-9]{4}-[0-9]{2}-[0-9]{2}$", x[1])) {
     return(as.Date(x, "%Y-%m-%d"))
   }
+
+  # Quarterly
+  if(grepl("^[0-9]{4}-Q[1-4]{1}$", x[1])) {
+    stopifnot(requireNamespace("zoo", quietly = TRUE))
+    x <- sub("Q", "", x)
+    # frac = 1 for end-of-quarter dates
+    return(zoo::as.Date(zoo::as.yearqtr(x), frac = 1))
+  }
+  warning("Could not convert dates - format unknown.")
+  x
 }
 
 create_query_url <- function(key, filter = NULL) {
