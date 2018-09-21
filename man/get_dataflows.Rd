@@ -6,11 +6,14 @@
 \usage{
 get_dataflows(...)
 }
+\arguments{
+\item{...}{Arguments passed to GET (e.g. timeout(10) to add maximum request time)}
+}
 \value{
 A dataframe
 }
 \description{
-#' @param ... Arguments passed to GET (e.g. timeout(10) to add maximum request time)
+Retrieve data frame of all datasets in the ECB Statistical Data Warehouse
 }
 \examples{
 df <- get_dataflows()

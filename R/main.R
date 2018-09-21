@@ -1,6 +1,6 @@
 #' Retrieve data frame of all datasets in the ECB Statistical Data Warehouse
 #'
-#' #' @param ... Arguments passed to GET (e.g. timeout(10) to add maximum request time)
+#' @param ... Arguments passed to GET (e.g. timeout(10) to add maximum request time)
 #'
 #' @return A dataframe
 #' @export
