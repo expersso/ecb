@@ -18,4 +18,3 @@ Get full, human-readable description of a series
 \examples{
 get_description("ICP.M.DE.N.000000+XEF000.4.ANR")
 }
-

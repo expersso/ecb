@@ -4,12 +4,14 @@
 \alias{get_data}
 \title{Retrieve data from the ECB Statistical Data Warehouse API}
 \usage{
-get_data(key, filter = NULL)
+get_data(key, filter = NULL, ...)
 }
 \arguments{
 \item{key}{A character string identifying the series to be retrieved}
 
 \item{filter}{A named list with additional filters (see \code{details})}
+
+\item{...}{Arguments passed to GET (e.g. timeout(10) to add maximum request time)}
 }
 \value{
 A data frame
@@ -63,4 +65,3 @@ See the \href{https://sdw-wsrest.ecb.europa.eu/}{SDW API} for more details.
 hicp <- get_data("ICP.M.U2.N.000000.4.ANR")
 head(hicp)
 }
-
