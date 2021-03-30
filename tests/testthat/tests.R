@@ -28,7 +28,7 @@ test_that("malformed series key returns 404 error", {
 })
 
 test_that("get_description returns a character vector", {
-  key <- "STS.A.AT+DE.N.UNEH.RTT000.4.AV3"
+  key <- "LFSI.M..S.UNEHRT.TOTAL0.15_74.T"
   desc <- get_description(key)
   expect_true(is.character(desc))
 
