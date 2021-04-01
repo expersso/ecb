@@ -7,5 +7,5 @@
 There were no ERRORs or WARNINGs. 
 
 ## First resubmission
-* Tests that are viable to fail due to internet resource not being
+* Tests that are liable to fail due to internet resource not being
 available will no longer run on CRAN.
