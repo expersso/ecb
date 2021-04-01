@@ -5,3 +5,4 @@
 ^README-.*\.png$
 ^cran-comments\.md$
 ^\.travis\.yml$
+^\.github$

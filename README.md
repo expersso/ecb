@@ -1,10 +1,6 @@
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/ecb)](http://cran.r-project.org/package=ecb)
-[![Travis-CI Build
-Status](https://travis-ci.org/expersso/ecb.svg?branch=master)](https://travis-ci.org/expersso/ecb)
-[![Coverage
-Status](https://img.shields.io/codecov/c/github/expersso/ecb/master.svg)](https://codecov.io/github/expersso/ecb?branch=master)
-[![Cranlogs
-Downloads](http://cranlogs.r-pkg.org/badges/grand-total/ecb)](http://cran.r-project.org/package=ecb)
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/GreenGrassBlueOcean/ecb/workflows/R-CMD-check/badge.svg)](https://github.com/GreenGrassBlueOcean/ecb/actions)
+<!-- badges: end -->
 
 ### Introduction
 
