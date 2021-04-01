@@ -1,10 +1,11 @@
 ## Test environments
-* Windows 7
+* Windows 10
 * Winbuilder (release and dev)
 * Ubuntu 14.04
 
 ## R CMD check results
 There were no ERRORs or WARNINGs. 
 
-## Second submission
-* Changed URL in readme.md to canonical URL (and added to buildignore)
+## First resubmission
+* Tests that are viable to fail due to internet resource not being
+available will no longer run on CRAN.

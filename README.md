@@ -1,4 +1,4 @@
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/ecb)](http://cran.r-project.org/package=ecb)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/ecb)](http://cran.r-project.org/package=ecb)
 [![Travis-CI Build
 Status](https://travis-ci.org/expersso/ecb.svg?branch=master)](https://travis-ci.org/expersso/ecb)
 [![Coverage
@@ -127,15 +127,15 @@ dims <- get_dimensions("ICP.M.DE.N.000000+XEF000.4.ANR")
 head(dims[[1]], 8)
 ```
 
-    ##               dim                         value
-    ## 1            FREQ                             M
-    ## 2        REF_AREA                            DE
-    ## 3      ADJUSTMENT                             N
-    ## 4        ICP_ITEM                        000000
-    ## 5 STS_INSTITUTION                             4
-    ## 6      ICP_SUFFIX                           ANR
-    ## 7     DOM_SER_IDS ICPT.M.VAL.HICP.RCH_A.DE.00.M
-    ## 8       UNIT_MULT                             0
+    ##               dim                    value
+    ## 1            FREQ                        M
+    ## 2        REF_AREA                       DE
+    ## 3      ADJUSTMENT                        N
+    ## 4        ICP_ITEM                   XEF000
+    ## 5 STS_INSTITUTION                        4
+    ## 6      ICP_SUFFIX                      ANR
+    ## 7       UNIT_MULT                        0
+    ## 8       DATA_COMP 000000 - ERGY00 - FOOD00
 
 ### Extended example
 
@@ -148,7 +148,7 @@ We start by retrieving the two series, using wildcards for the
 geographic area dimension:
 
 ``` r
-unemp <- get_data("STS.A..N.UNEH.RTT000.4.AV3", 
+unemp <- get_data("LFSI.M..S.UNEHRT.TOTAL0.15_74.T", 
                  filter = list(startPeriod = "2000"))
 
 wages <- get_data("MNA.A.N..W2.S1.S1._Z.COM_HW._Z._T._Z.IX.V.N", 
@@ -158,51 +158,47 @@ head(unemp)
 ```
 
     ## # A tibble: 6 x 9
-    ##   freq  ref_area adjustment sts_concept sts_class sts_institution
-    ##   <chr> <chr>    <chr>      <chr>       <chr>     <chr>          
-    ## 1 A     AT       N          UNEH        RTT000    4              
-    ## 2 A     AT       N          UNEH        RTT000    4              
-    ## 3 A     AT       N          UNEH        RTT000    4              
-    ## 4 A     AT       N          UNEH        RTT000    4              
-    ## 5 A     AT       N          UNEH        RTT000    4              
-    ## 6 A     AT       N          UNEH        RTT000    4              
-    ## # ... with 3 more variables: sts_suffix <chr>, obstime <chr>,
-    ## #   obsvalue <dbl>
+    ##   freq  ref_area adjustment lfs_indicator lfs_breakdown age_breakdown gender
+    ##   <chr> <chr>    <chr>      <chr>         <chr>         <chr>         <chr> 
+    ## 1 M     AT       S          UNEHRT        TOTAL0        15_74         T     
+    ## 2 M     AT       S          UNEHRT        TOTAL0        15_74         T     
+    ## 3 M     AT       S          UNEHRT        TOTAL0        15_74         T     
+    ## 4 M     AT       S          UNEHRT        TOTAL0        15_74         T     
+    ## 5 M     AT       S          UNEHRT        TOTAL0        15_74         T     
+    ## 6 M     AT       S          UNEHRT        TOTAL0        15_74         T     
+    ## # ... with 2 more variables: obstime <chr>, obsvalue <dbl>
 
 ``` r
 head(wages)
 ```
 
     ## # A tibble: 6 x 16
-    ##   freq  adjustment ref_area counterpart_area ref_sector counterpart_sector
-    ##   <chr> <chr>      <chr>    <chr>            <chr>      <chr>             
-    ## 1 A     N          AT       W2               S1         S1                
-    ## 2 A     N          AT       W2               S1         S1                
-    ## 3 A     N          AT       W2               S1         S1                
-    ## 4 A     N          AT       W2               S1         S1                
-    ## 5 A     N          AT       W2               S1         S1                
-    ## 6 A     N          AT       W2               S1         S1                
+    ##   freq  adjustment ref_area counterpart_area ref_sector counterpart_sec~
+    ##   <chr> <chr>      <chr>    <chr>            <chr>      <chr>           
+    ## 1 A     N          AT       W2               S1         S1              
+    ## 2 A     N          AT       W2               S1         S1              
+    ## 3 A     N          AT       W2               S1         S1              
+    ## 4 A     N          AT       W2               S1         S1              
+    ## 5 A     N          AT       W2               S1         S1              
+    ## 6 A     N          AT       W2               S1         S1              
     ## # ... with 10 more variables: accounting_entry <chr>, sto <chr>,
-    ## #   instr_asset <chr>, activity <chr>, expenditure <chr>,
-    ## #   unit_measure <chr>, prices <chr>, transformation <chr>, obstime <chr>,
-    ## #   obsvalue <dbl>
+    ## #   instr_asset <chr>, activity <chr>, expenditure <chr>, unit_measure <chr>,
+    ## #   prices <chr>, transformation <chr>, obstime <chr>, obsvalue <dbl>
 
 To get a human-readable description of a series:
 
 ``` r
-desc <- head(get_description("STS.A..N.UNEH.RTT000.4.AV3"), 3)
+desc <- head(get_description("LFSI.M..S.UNEHRT.TOTAL0.15_74.T"), 3)
 strwrap(desc, width = 80)
 ```
 
-    ## [1] "Austria - Standardised unemployment, Rate, Total (all ages), Total (male and"   
-    ## [2] "female); 3-year average; Eurostat; Neither seasonally nor working day adjusted,"
-    ## [3] "percentage of civilian workforce"                                               
-    ## [4] "Belgium - Standardised unemployment, Rate, Total (all ages), Total (male and"   
-    ## [5] "female); 3-year average; Eurostat; Neither seasonally nor working day adjusted,"
-    ## [6] "percentage of civilian workforce"                                               
-    ## [7] "Bulgaria - Standardised unemployment, Rate, Total (all ages), Total (male and"  
-    ## [8] "female); 3-year average; Eurostat; Neither seasonally nor working day adjusted,"
-    ## [9] "percentage of civilian workforce"
+    ## [1] "Netherlands; European Labour Force Survey; Unemployment rate; Total; Age 15 to"
+    ## [2] "74; Total; Seasonally adjusted, not working day adjusted"                      
+    ## [3] "Poland; European Labour Force Survey; Unemployment rate; Total; Age 15 to 74;" 
+    ## [4] "Total; Seasonally adjusted, not working day adjusted"                          
+    ## [5] "Euro area (Member States and Institutions of the Euro Area) changing"          
+    ## [6] "composition; European Labour Force Survey; Unemployment rate; Total; Age 15 to"
+    ## [7] "74; Total; Seasonally adjusted, not working day adjusted"
 
 We now join together the two data sets:
 
@@ -222,8 +218,31 @@ library(dplyr)
     ##     intersect, setdiff, setequal, union
 
 ``` r
-unemp <- unemp %>% select(ref_area, obstime, "unemp" = obsvalue)
-wages <- wages %>% select(ref_area, obstime, "wage" = obsvalue)
+library(lubridate)
+```
+
+    ## 
+    ## Attaching package: 'lubridate'
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     date, intersect, setdiff, union
+
+``` r
+unemp <- unemp %>% 
+  mutate(obstime = convert_dates(obstime)) %>% 
+  group_by(ref_area, obstime = year(obstime)) %>% 
+  summarise(obsvalue = mean(obsvalue)) %>%
+  ungroup() %>% 
+  select(ref_area, obstime, "unemp" = obsvalue)
+```
+
+    ## `summarise()` regrouping output by 'ref_area' (override with `.groups` argument)
+
+``` r
+wages <- wages %>% 
+  mutate(obstime = as.numeric(obstime)) %>% 
+  select(ref_area, obstime, "wage" = obsvalue)
 
 df <- left_join(unemp, wages)
 ```
@@ -236,13 +255,13 @@ head(df)
 
     ## # A tibble: 6 x 4
     ##   ref_area obstime unemp  wage
-    ##   <chr>    <chr>   <dbl> <dbl>
-    ## 1 AT       2000     4.27  77.0
-    ## 2 AT       2001     4.02  78.6
-    ## 3 AT       2002     4.10  80.4
-    ## 4 AT       2003     4.38  82.2
-    ## 5 AT       2004     4.88  83.5
-    ## 6 AT       2005     5.30  85.9
+    ##   <chr>      <dbl> <dbl> <dbl>
+    ## 1 AT          2000  3.89  67.0
+    ## 2 AT          2001  4.01  68.3
+    ## 3 AT          2002  4.39  69.9
+    ## 4 AT          2003  4.78  71.5
+    ## 5 AT          2004  5.49  72.6
+    ## 6 AT          2005  5.64  74.7
 
 Finally, we plot the annual change in wages against the annual change in
 unemployment for all countries:
@@ -265,10 +284,9 @@ df %>%
        title = "Relationship between wages and unemployment\n")
 ```
 
-![](vignettes/phillips_plot-1.png)
+    ## `geom_smooth()` using formula 'y ~ x'
 
-At a first glance, most countries indeed seem to follow the prediction
-of a negative relationship between wages and unemployment.
+![](vignettes/phillips_plot-1.png)
 
 ### Disclaimer
 

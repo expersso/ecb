@@ -2,8 +2,8 @@ Package: ecb
 Type: Package
 Title: Programmatic Access to the European Central Bank's Statistical Data
     Warehouse (SDW)
-Version: 0.3
-Date: 2016-10-26
+Version: 0.4
+Date: 2021-04-01
 Authors@R: person("Eric", "Persson", email = "expersso5@gmail.com",
     role = c("aut", "cre"))
 Description: Provides an interface to the European Central Bank's Statistical
@@ -16,6 +16,7 @@ Suggests:
     knitr,
     rmarkdown,
     dplyr,
+    lubridate,
     ggplot2,
     testthat,
     zoo
@@ -25,4 +26,4 @@ Imports:
     xml2,
     httr
 VignetteBuilder: knitr
-RoxygenNote: 6.0.1
+RoxygenNote: 7.1.1
