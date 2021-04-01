@@ -2,7 +2,7 @@ Package: ecb
 Type: Package
 Title: Programmatic Access to the European Central Bank's Statistical Data
     Warehouse
-Version: 0.4
+Version: 0.4.0
 Date: 2021-04-01
 Authors@R: person("Eric", "Persson", email = "expersso5@gmail.com",
     role = c("aut", "cre"))
