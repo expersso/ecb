@@ -140,8 +140,8 @@ head(dims[[1]], 8)
     ## 4        ICP_ITEM                000000
     ## 5 STS_INSTITUTION                     4
     ## 6      ICP_SUFFIX                   ANR
-    ## 7       UNIT_MULT                     0
-    ## 8           TITLE HICP - Overall index"
+    ## 7           TITLE HICP - Overall index"
+    ## 8       UNIT_MULT                     0
 
 ### Extended example
 

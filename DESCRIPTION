@@ -3,8 +3,8 @@ Type: Package
 Title: Programmatic Access to the European Central Bank's Data Portal
 Version: 0.4.1
 Date: 2025-02-25
-Authors@R: person("Eric", "Persson", email = "expersso5@gmail.com",
-    role = c("aut", "cre"))
+Authors@R: c(person("Eric", "Persson", email = "expersso5@gmail.com", role = c("aut", "cre")),
+              person(c("Franz", "X."), "Mohr", email = "franz.x.mohr@outlook.com", role = c("ctp"), comment = c(ORCiD = "0009-0003-8890-7781")))
 Description: Provides an interface to the European Central Bank's Data
     Portal API, allowing for programmatic retrieval of a vast quantity
     of statistical data.

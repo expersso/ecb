@@ -23,7 +23,7 @@ The `ecb` package package provides an `R` interface to the [European Central Ban
 The following example extracts the last twelve observations of headline and 
 "core" HICP inflation for a number of countries available in the `ICP` database.
 See details below on how to use the `filter` parameter and how to find and use
-the SDW series keys.
+the EDP series keys.
 
 ```{r}
 library(ecb)
@@ -79,16 +79,16 @@ Available filter parameters:
 
 See the [EDP API](https://data-api.ecb.europa.eu/) for more details.
 
-#### Using SDW keys
+#### Using EDP keys
 
-The easiest way to find and learn more about SDW series key is to browse the
+The easiest way to find and learn more about EDP series key is to browse the
 [EDP website](https://data.ecb.europa.eu/). After finding the series one is
 interested in, and applying the relevant filters (frequency, geographic area,
 etc), one can just copy the key:
 
 ![screenshot](screenshot.png)
 
-The SDW website also has provides all the necessary metadata, so it is much 
+The EDP website also has provides all the necessary metadata, so it is much 
 easier to explore data availability (in terms of available breakdowns, time 
 periods, etc) directly on the website than it is to do it directly through the 
 `ecb` package.
@@ -102,7 +102,7 @@ for *all* available countries and country groups.
 Instead of wildcarding, one can use the `+` operator to specify multiple values
 for a dimension. For example, `ICP.M.DE.N.000000+XEF000.4.ANR` retrieves both
 headline inflation (`000000`) and core inflation (`XEF000`). Learning that e.g.
-`XEF000` corresponds to core inflation would be done by browsing the SDW
+`XEF000` corresponds to core inflation would be done by browsing the EDP
 website:
 
 ![screenshot2](screenshot2.png)
