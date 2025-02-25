@@ -1,10 +1,10 @@
 ---
-title: "Programmatic access to the European Central Bank's Statistical Data Warehouse (SDW)"
+title: "Programmatic access to the European Central Bank's Data Portal (EDP)"
 author: "Eric Persson"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Programmatic access to ECB SDW}
+  %\VignetteIndexEntry{Programmatic access to ECB EDP}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,14 +16,14 @@ knitr::opts_chunk$set(fig.path = "", fig.width = 6, fig.height = 5,
 
 ### Introduction
 
-The `ecb` package package provides an `R` interface to the [European Central Bank's Statistical Data Warehouse](https://sdw.ecb.europa.eu/).
+The `ecb` package package provides an `R` interface to the [European Central Bank's Data Portal](https://data.ecb.europa.eu/).
 
 ### Example usage
 
 The following example extracts the last twelve observations of headline and 
 "core" HICP inflation for a number of countries available in the `ICP` database.
 See details below on how to use the `filter` parameter and how to find and use
-the SDW series keys.
+the EDP series keys.
 
 ```{r}
 library(ecb)
@@ -77,18 +77,18 @@ Available filter parameters:
     * `false` (default) returns only version currently in production
     * `true` returns version currently in production, as well as all previous versions
 
-See the [SDW API](https://sdw-wsrest.ecb.europa.eu/) for more details.
+See the [EDP API](https://data-api.ecb.europa.eu/) for more details.
 
-#### Using SDW keys
+#### Using EDP keys
 
-The easiest way to find and learn more about SDW series key is to browse the
-[SDW website](https://sdw.ecb.europa.eu/). After finding the series one is
+The easiest way to find and learn more about EDP series key is to browse the
+[EDP website](https://data.ecb.europa.eu/). After finding the series one is
 interested in, and applying the relevant filters (frequency, geographic area,
 etc), one can just copy the key:
 
 ![screenshot](screenshot.png)
 
-The SDW website also has provides all the necessary metadata, so it is much 
+The EDP website also has provides all the necessary metadata, so it is much 
 easier to explore data availability (in terms of available breakdowns, time 
 periods, etc) directly on the website than it is to do it directly through the 
 `ecb` package.
@@ -102,7 +102,7 @@ for *all* available countries and country groups.
 Instead of wildcarding, one can use the `+` operator to specify multiple values
 for a dimension. For example, `ICP.M.DE.N.000000+XEF000.4.ANR` retrieves both
 headline inflation (`000000`) and core inflation (`XEF000`). Learning that e.g.
-`XEF000` corresponds to core inflation would be done by browsing the SDW
+`XEF000` corresponds to core inflation would be done by browsing the EDP
 website:
 
 ![screenshot2](screenshot2.png)

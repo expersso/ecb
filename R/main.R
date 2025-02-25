@@ -10,7 +10,7 @@
 #' head(df)
 get_dataflows <- function(...) {
 
-  query_url <- "https://sdw-wsrest.ecb.europa.eu/service/dataflow"
+  query_url <- "https://data-api.ecb.europa.eu/service/dataflow"
 
   req <- make_request(query_url, "metadata", ...)
 
@@ -216,7 +216,7 @@ convert_dates <- function(x) {
 
 create_query_url <- function(key, filter = NULL) {
 
-  url <- "https://sdw-wsrest.ecb.europa.eu/service/data"
+  url <- "https://data-api.ecb.europa.eu/service/data"
 
   # Get flow reference (= dataset abbreviation, e.g. ICP or BOP)
   flow_ref <- regmatches(key, regexpr("^[[:alnum:]]+", key))
@@ -237,7 +237,8 @@ create_query_url <- function(key, filter = NULL) {
   query <- paste0(names, "=", values, collapse = "&")
   query <- paste0("?", query)
 
-  query_url <- paste(url, flow_ref, key_q, query, sep = "/")
+  query_url <- paste(url, flow_ref, key_q, sep = "/")
+  query_url <- paste0(query_url, query)
   query_url
 }
 

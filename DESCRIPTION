@@ -1,16 +1,16 @@
 Package: ecb
 Type: Package
-Title: Programmatic Access to the European Central Bank's Statistical Data
-    Warehouse
-Version: 0.4.0
-Date: 2021-04-01
-Authors@R: person("Eric", "Persson", email = "expersso5@gmail.com",
-    role = c("aut", "cre"))
-Description: Provides an interface to the European Central Bank's Statistical
-    Data Warehouse API, allowing for programmatic retrieval of a vast quantity
+Title: Programmatic Access to the European Central Bank's Data Portal
+Version: 0.4.1
+Date: 2025-02-25
+Authors@R: c(person("Eric", "Persson", email = "expersso5@gmail.com", role = c("aut", "cre")),
+              person(c("Franz", "X."), "Mohr", email = "franz.x.mohr@outlook.com", role = c("ctp"), comment = c(ORCiD = "0009-0003-8890-7781")))
+Description: Provides an interface to the European Central Bank's Data
+    Portal API, allowing for programmatic retrieval of a vast quantity
     of statistical data.
 License: CC0
-URL: https://sdw.ecb.europa.eu/ https://www.ecb.europa.eu
+URL: https://github.com/expersso/ecb
+BugReports: https://github.com/expersso/ecb/issues
 Suggests:
     knitr,
     rmarkdown,
@@ -25,4 +25,5 @@ Imports:
     xml2,
     httr
 VignetteBuilder: knitr
-RoxygenNote: 7.1.1
+RoxygenNote: 7.3.2
+Encoding: UTF-8
