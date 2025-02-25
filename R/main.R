@@ -10,7 +10,7 @@
 #' head(df)
 get_dataflows <- function(...) {
 
-  query_url <- "https://data-api.ecb.europa.eu/service/data"
+  query_url <- "https://data-api.ecb.europa.eu/service/dataflow"
 
   req <- make_request(query_url, "metadata", ...)
 
