@@ -4,10 +4,10 @@ output:
     variant: markdown_github
 ---
 
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/ecb)](http://cran.r-project.org/package=ecb)
+[![CRAN status](https://www.r-pkg.org/badges/version/ecb)](https://CRAN.R-project.org/package=ecb)
 [![R-CMD-check](https://github.com/franzmohr/ecb/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/franzmohr/ecb/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/franzmohr/ecb/graph/badge.svg)](https://app.codecov.io/gh/franzmohr/ecb)
-[![Cranlogs Downloads](http://cranlogs.r-pkg.org/badges/grand-total/ecb)](http://cran.r-project.org/package=ecb)
+[![Cranlogs Downloads](https://cranlogs.r-pkg.org/badges/ecb)](https://cran.r-project.org/package=ecb)
 
 ```{r options, echo=FALSE}
 knitr::opts_chunk$set(fig.path = "vignettes/", fig.width = 6, fig.height = 5, 

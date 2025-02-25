@@ -1,9 +1,10 @@
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/ecb)](http://cran.r-project.org/package=ecb)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/ecb)](https://CRAN.R-project.org/package=ecb)
 [![R-CMD-check](https://github.com/franzmohr/ecb/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/franzmohr/ecb/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/franzmohr/ecb/graph/badge.svg)](https://app.codecov.io/gh/franzmohr/ecb)
 [![Cranlogs
-Downloads](http://cranlogs.r-pkg.org/badges/grand-total/ecb)](http://cran.r-project.org/package=ecb)
+Downloads](https://cranlogs.r-pkg.org/badges/ecb)](https://cran.r-project.org/package=ecb)
 
 ### Introduction
 
@@ -132,15 +133,15 @@ dims <- get_dimensions("ICP.M.DE.N.000000+XEF000.4.ANR")
 head(dims[[1]], 8)
 ```
 
-    ##               dim  value
-    ## 1            FREQ      M
-    ## 2        REF_AREA     DE
-    ## 3      ADJUSTMENT      N
-    ## 4        ICP_ITEM 000000
-    ## 5 STS_INSTITUTION      4
-    ## 6      ICP_SUFFIX    ANR
-    ## 7            UNIT   PCCH
-    ## 8       UNIT_MULT      0
+    ##               dim                 value
+    ## 1            FREQ                     M
+    ## 2        REF_AREA                    DE
+    ## 3      ADJUSTMENT                     N
+    ## 4        ICP_ITEM                000000
+    ## 5 STS_INSTITUTION                     4
+    ## 6      ICP_SUFFIX                   ANR
+    ## 7       UNIT_MULT                     0
+    ## 8           TITLE HICP - Overall index"
 
 ### Extended example
 
