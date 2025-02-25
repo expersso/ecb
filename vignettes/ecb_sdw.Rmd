@@ -1,10 +1,10 @@
 ---
-title: "Programmatic access to the European Central Bank's Statistical Data Warehouse (SDW)"
+title: "Programmatic access to the European Central Bank's Data Portal (EDP)"
 author: "Eric Persson"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Programmatic access to ECB SDW}
+  %\VignetteIndexEntry{Programmatic access to ECB EDP}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,7 +16,7 @@ knitr::opts_chunk$set(fig.path = "", fig.width = 6, fig.height = 5,
 
 ### Introduction
 
-The `ecb` package package provides an `R` interface to the [European Central Bank's Statistical Data Warehouse](https://sdw.ecb.europa.eu/).
+The `ecb` package package provides an `R` interface to the [European Central Bank's Data Portal](https://data.ecb.europa.eu/).
 
 ### Example usage
 
@@ -77,12 +77,12 @@ Available filter parameters:
     * `false` (default) returns only version currently in production
     * `true` returns version currently in production, as well as all previous versions
 
-See the [SDW API](https://sdw-wsrest.ecb.europa.eu/) for more details.
+See the [EDP API](https://data-api.ecb.europa.eu/) for more details.
 
 #### Using SDW keys
 
 The easiest way to find and learn more about SDW series key is to browse the
-[SDW website](https://sdw.ecb.europa.eu/). After finding the series one is
+[EDP website](https://data.ecb.europa.eu/). After finding the series one is
 interested in, and applying the relevant filters (frequency, geographic area,
 etc), one can just copy the key:
 

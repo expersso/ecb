@@ -10,7 +10,7 @@ Description: Provides an interface to the European Central Bank's Statistical
     Data Warehouse API, allowing for programmatic retrieval of a vast quantity
     of statistical data.
 License: CC0
-URL: https://sdw.ecb.europa.eu/ https://www.ecb.europa.eu
+URL: https://data.ecb.europa.eu/ https://www.ecb.europa.eu
 Suggests:
     knitr,
     rmarkdown,
@@ -25,4 +25,5 @@ Imports:
     xml2,
     httr
 VignetteBuilder: knitr
-RoxygenNote: 7.1.1
+RoxygenNote: 7.3.2
+Encoding: UTF-8
