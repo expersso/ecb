@@ -9,7 +9,8 @@ Description: Provides an interface to the European Central Bank's Data
     Portal API, allowing for programmatic retrieval of a vast quantity
     of statistical data.
 License: CC0
-URL: https://data.ecb.europa.eu/ https://www.ecb.europa.eu
+URL: https://github.com/expersso/ecb
+BugReports: https://github.com/expersso/ecb/issues
 Suggests:
     knitr,
     rmarkdown,
