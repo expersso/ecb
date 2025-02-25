@@ -1,13 +1,12 @@
 Package: ecb
 Type: Package
-Title: Programmatic Access to the European Central Bank's Statistical Data
-    Warehouse
-Version: 0.4.0
-Date: 2021-04-01
+Title: Programmatic Access to the European Central Bank's Data Portal
+Version: 0.4.1
+Date: 2025-02-25
 Authors@R: person("Eric", "Persson", email = "expersso5@gmail.com",
     role = c("aut", "cre"))
-Description: Provides an interface to the European Central Bank's Statistical
-    Data Warehouse API, allowing for programmatic retrieval of a vast quantity
+Description: Provides an interface to the European Central Bank's Data
+    Portal API, allowing for programmatic retrieval of a vast quantity
     of statistical data.
 License: CC0
 URL: https://data.ecb.europa.eu/ https://www.ecb.europa.eu
