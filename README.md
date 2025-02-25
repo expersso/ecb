@@ -1,8 +1,8 @@
 [![CRAN
 status](https://www.r-pkg.org/badges/version/ecb)](https://CRAN.R-project.org/package=ecb)
-[![R-CMD-check](https://github.com/franzmohr/ecb/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/franzmohr/ecb/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/expersso/ecb/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/expersso/ecb/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
-coverage](https://codecov.io/gh/franzmohr/ecb/graph/badge.svg)](https://app.codecov.io/gh/franzmohr/ecb)
+coverage](https://codecov.io/gh/expersso/ecb/graph/badge.svg)](https://app.codecov.io/gh/expersso/ecb)
 [![Cranlogs
 Downloads](https://cranlogs.r-pkg.org/badges/ecb)](https://cran.r-project.org/package=ecb)
 
@@ -141,7 +141,7 @@ head(dims[[1]], 8)
     ## 5 STS_INSTITUTION                     4
     ## 6      ICP_SUFFIX                   ANR
     ## 7           TITLE HICP - Overall index"
-    ## 8       UNIT_MULT                     0
+    ## 8            UNIT                  PCCH
 
 ### Extended example
 
