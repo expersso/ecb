@@ -1,8 +1,7 @@
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/ecb)](http://cran.r-project.org/package=ecb)
-[![Travis-CI Build
-Status](https://travis-ci.org/expersso/ecb.svg?branch=master)](https://travis-ci.org/expersso/ecb)
-[![Coverage
-Status](https://img.shields.io/codecov/c/github/expersso/ecb/master.svg)](https://codecov.io/github/expersso/ecb?branch=master)
+[![R-CMD-check](https://github.com/franzmohr/ecb/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/franzmohr/ecb/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/franzmohr/ecb/graph/badge.svg)](https://app.codecov.io/gh/franzmohr/ecb)
 [![Cranlogs
 Downloads](http://cranlogs.r-pkg.org/badges/grand-total/ecb)](http://cran.r-project.org/package=ecb)
 
@@ -133,24 +132,15 @@ dims <- get_dimensions("ICP.M.DE.N.000000+XEF000.4.ANR")
 head(dims[[1]], 8)
 ```
 
-    ##               dim
-    ## 1            FREQ
-    ## 2        REF_AREA
-    ## 3      ADJUSTMENT
-    ## 4        ICP_ITEM
-    ## 5 STS_INSTITUTION
-    ## 6      ICP_SUFFIX
-    ## 7     TITLE_COMPL
-    ## 8     DOM_SER_IDS
-    ##                                                                                                          value
-    ## 1                                                                                                            M
-    ## 2                                                                                                           DE
-    ## 3                                                                                                            N
-    ## 4                                                                                                       000000
-    ## 5                                                                                                            4
-    ## 6                                                                                                          ANR
-    ## 7 Germany - HICP - Overall index, Annual rate of change, Eurostat, Neither seasonally nor working day adjusted
-    ## 8                                                                                ICPT.M.VAL.HICP.RCH_A.DE.00.M
+    ##               dim  value
+    ## 1            FREQ      M
+    ## 2        REF_AREA     DE
+    ## 3      ADJUSTMENT      N
+    ## 4        ICP_ITEM 000000
+    ## 5 STS_INSTITUTION      4
+    ## 6      ICP_SUFFIX    ANR
+    ## 7            UNIT   PCCH
+    ## 8       UNIT_MULT      0
 
 ### Extended example
 
