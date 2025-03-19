@@ -7,3 +7,4 @@
 ^\.travis\.yml$
 ^CRAN-RELEASE$
 ^\.github$
+^CRAN-SUBMISSION$

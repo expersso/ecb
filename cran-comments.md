@@ -4,8 +4,7 @@
 * Ubuntu 14.04
 
 ## R CMD check results
-There were no ERRORs or WARNINGs. 
+There were no ERRORs or WARNINGs.
 
-## First resubmission
-* Tests that are liable to fail due to internet resource not being
-available will no longer run on CRAN.
+## First submission of new version
+* Fixing failing tests due to API update.
