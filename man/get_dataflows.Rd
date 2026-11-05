@@ -10,12 +10,15 @@ get_dataflows(...)
 \item{...}{Arguments passed to GET (e.g. timeout(10) to add maximum request time)}
 }
 \value{
-A dataframe
+A dataframe, or \code{NULL} (invisibly) with an informative
+  message if the ECB API cannot be reached or returns an error.
 }
 \description{
 Retrieve data frame of all datasets in the ECB Statistical Data Warehouse
 }
 \examples{
+\donttest{
 df <- get_dataflows()
 head(df)
+}
 }

@@ -16,7 +16,18 @@ A date-formatted vector
 Format date variable retrieved from the SDW into a proper date variable
 }
 \examples{
+convert_dates(c("2023", "2024"))
+convert_dates(c("2024-01", "2024-02"))
+convert_dates(c("2024-01-15", "2024-01-16"))
+if (requireNamespace("zoo", quietly = TRUE)) {
+  convert_dates(c("2024-Q1", "2024-Q2"))
+}
+
+\donttest{
 hicp <- get_data("ICP.M.U2.N.000000.4.ANR")
-hicp$obstime <- convert_dates(hicp$obstime)
-str(hicp)
+if (!is.null(hicp)) {
+  hicp$obstime <- convert_dates(hicp$obstime)
+  str(hicp)
+}
+}
 }

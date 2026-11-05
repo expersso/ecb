@@ -12,6 +12,22 @@ vignette: >
 ```{r options, echo=FALSE}
 knitr::opts_chunk$set(fig.path = "", fig.width = 6, fig.height = 5, 
                       cache = FALSE, warning = FALSE)
+
+# The examples below need the ECB API. If it cannot be reached when the
+# vignette is built, the network-dependent chunks are not evaluated.
+api_ok <- tryCatch(
+  httr::status_code(httr::HEAD("https://data-api.ecb.europa.eu/service/dataflow/ECB/EXR",
+                               httr::timeout(30))) < 400,
+  error = function(e) FALSE
+)
+data_ok <- FALSE
+```
+
+```{r api_note, echo=FALSE, results="asis"}
+if (!api_ok) {
+  cat("> **Note:** The ECB Data Portal API could not be reached when this",
+      "vignette was built, so the code below was not run and no output is shown.\n")
+}
 ```
 
 ### Introduction
@@ -108,9 +124,9 @@ website:
 ![screenshot2](screenshot2.png)
 
 To remind oneself of what different values for different dimensions mean, one
-can use the `get_dimensions)` function, which returns a list of dataframes:
+can use the `get_dimensions()` function, which returns a list of dataframes:
 
-```{r get_dimensions_example}
+```{r get_dimensions_example, eval=api_ok}
 dims <- get_dimensions("ICP.M.DE.N.000000+XEF000.4.ANR")
 lapply(dims, head)
 ```
@@ -125,7 +141,7 @@ relationship between these two variables.
 We start by retrieving the two series, using wildcards for the geographic area
 dimension:
 
-```{r retrieve_data}
+```{r retrieve_data, eval=api_ok}
 
 unemp <- get_data("LFSI.M..S.UNEHRT.TOTAL0.15_74.T", 
                  filter = list(startPeriod = "2000"))
@@ -137,16 +153,20 @@ head(unemp)
 head(wages)
 ```
 
+```{r data_check, include=FALSE, eval=api_ok}
+data_ok <- !is.null(unemp) && !is.null(wages)
+```
+
 To get a human-readable description of a series:
 
-```{r get_description_example}
+```{r get_description_example, eval=api_ok}
 desc <- head(get_description("LFSI.M..S.UNEHRT.TOTAL0.15_74.T"), 3)
 strwrap(desc, width = 80)
 ```
 
 We now join together the two data sets:
 
-```{r join_data}
+```{r join_data, eval=data_ok}
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(lubridate))
 
@@ -168,7 +188,7 @@ head(df)
 Finally, we plot the annual change in wages against the annual change in
 unemployment for all countries:
 
-```{r phillips_plot, fig.width = 7, fig.height = 6}
+```{r phillips_plot, fig.width = 7, fig.height = 6, eval=data_ok}
 library(ggplot2)
 
 df %>% 

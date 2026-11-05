@@ -14,7 +14,8 @@ get_data(key, filter = NULL, ...)
 \item{...}{Arguments passed to GET (e.g. timeout(10) to add maximum request time)}
 }
 \value{
-A data frame
+A data frame, or \code{NULL} (invisibly) with an informative
+  message if the ECB API cannot be reached or returns an error.
 }
 \description{
 Retrieve data from the ECB Statistical Data Warehouse API
@@ -58,10 +59,13 @@ Available filter parameters:
    \item \code{true} returns version currently in production, as well as all previous versions
    }
 }
-See the \href{https://sdw-wsrest.ecb.europa.eu/}{SDW API} for more details.
+See the \href{https://data.ecb.europa.eu/help/api/overview}{ECB Data Portal API}
+for more details.
 }
 \examples{
+\donttest{
 # Get monthly data on annualized euro area headline HICP
 hicp <- get_data("ICP.M.U2.N.000000.4.ANR")
 head(hicp)
+}
 }

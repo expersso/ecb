@@ -4,17 +4,22 @@
 \alias{get_description}
 \title{Get full, human-readable description of a series}
 \usage{
-get_description(key)
+get_description(key, ...)
 }
 \arguments{
 \item{key}{A character string identifying the series to be retrieved}
+
+\item{...}{Arguments passed to GET (e.g. timeout(10) to add maximum request time)}
 }
 \value{
-A character vector
+A character vector, or \code{NULL} (invisibly) with an informative
+  message if the ECB API cannot be reached or returns an error.
 }
 \description{
 Get full, human-readable description of a series
 }
 \examples{
+\donttest{
 get_description("ICP.M.DE.N.000000+XEF000.4.ANR")
+}
 }

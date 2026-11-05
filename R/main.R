@@ -2,19 +2,24 @@
 #'
 #' @param ... Arguments passed to GET (e.g. timeout(10) to add maximum request time)
 #'
-#' @return A dataframe
+#' @return A dataframe, or \code{NULL} (invisibly) with an informative
+#'   message if the ECB API cannot be reached or returns an error.
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' df <- get_dataflows()
 #' head(df)
+#' }
 get_dataflows <- function(...) {
 
   query_url <- "https://data-api.ecb.europa.eu/service/dataflow"
 
   req <- make_request(query_url, "metadata", ...)
+  if (is.null(req)) return(invisible(NULL))
 
-  res <- xml2::read_xml(httr::content(req, "text"), verbose = TRUE)
+  res <- parse_xml(req)
+  if (is.null(res)) return(invisible(NULL))
 
   ecb_ns <- xml2::xml_ns(res) # xml namespace
 
@@ -74,15 +79,19 @@ get_dataflows <- function(...) {
 #'    \item \code{true} returns version currently in production, as well as all previous versions
 #'    }
 #' }
-#' See the \href{https://sdw-wsrest.ecb.europa.eu/}{SDW API} for more details.
+#' See the \href{https://data.ecb.europa.eu/help/api/overview}{ECB Data Portal API}
+#' for more details.
 #'
-#' @return A data frame
+#' @return A data frame, or \code{NULL} (invisibly) with an informative
+#'   message if the ECB API cannot be reached or returns an error.
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' # Get monthly data on annualized euro area headline HICP
 #' hicp <- get_data("ICP.M.U2.N.000000.4.ANR")
 #' head(hicp)
+#' }
 get_data <- function(key, filter = NULL, ...) {
 
   if(!"detail" %in% names(filter)) {
@@ -90,21 +99,27 @@ get_data <- function(key, filter = NULL, ...) {
   }
 
   if(!filter[["detail"]] %in% c("full", "dataonly")) {
-    return(get_dimensions(key))
+    return(get_dimensions(key, ...))
   }
 
   query_url <- create_query_url(key, filter = filter)
 
   req <- make_request(query_url, "data", ...)
+  if (is.null(req)) return(invisible(NULL))
 
   tmp <- tempfile()
-  writeLines(httr::content(req, "text", encoding = "utf-8"), tmp)
+  on.exit(unlink(tmp), add = TRUE)
 
-  result <- rsdmx::readSDMX(tmp, FALSE)
+  df <- tryCatch({
+    writeLines(httr::content(req, "text", encoding = "utf-8"), tmp)
+    as.data.frame(rsdmx::readSDMX(tmp, FALSE))
+  }, error = function(e) {
+    message("Could not parse the response from the ECB API ",
+            "(the data format may have changed):\n", conditionMessage(e))
+    NULL
+  })
+  if (is.null(df)) return(invisible(NULL))
 
-  unlink(tmp)
-
-  df <- as.data.frame(result)
   df <- structure(df,
                   class = c("tbl_df", "tbl", "data.frame"),
                   names = tolower(names(df)))
@@ -116,12 +131,16 @@ get_data <- function(key, filter = NULL, ...) {
 #' @param key A character string identifying the series to be retrieved
 #' @param ... Arguments passed to GET (e.g. timeout(10) to add maximum request time)
 #'
-#' @return A list of data frames, one for each series retrieved
+#' @return A list of data frames, one for each series retrieved, or
+#'   \code{NULL} (invisibly) with an informative message if the ECB API cannot
+#'   be reached or returns an error.
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' hicp_dims <- get_dimensions("ICP.M.U2.N.000000.4.ANR")
 #' hicp_dims[[1]]
+#' }
 get_dimensions <- function(key, ...) {
 
   query_url <- create_query_url(key, filter = list("detail" = "nodata"))
@@ -130,9 +149,10 @@ get_dimensions <- function(key, ...) {
   flow_ref <- regmatches(key, regexpr("^[[:alnum:]]+", key))
 
   req <- make_request(query_url, "metadata", ...)
+  if (is.null(req)) return(invisible(NULL))
 
-  skeys <- xml2::read_xml(httr::content(req, "text", encoding = "utf-8"),
-                          verbose = TRUE)
+  skeys <- parse_xml(req)
+  if (is.null(skeys)) return(invisible(NULL))
 
   skeys_ns <- xml2::xml_ns(skeys) # xml namespace
 
@@ -164,15 +184,23 @@ get_dimensions <- function(key, ...) {
 #' Get full, human-readable description of a series
 #'
 #' @param key A character string identifying the series to be retrieved
+#' @param ... Arguments passed to GET (e.g. timeout(10) to add maximum request time)
 #'
-#' @return A character vector
+#' @return A character vector, or \code{NULL} (invisibly) with an informative
+#'   message if the ECB API cannot be reached or returns an error.
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' get_description("ICP.M.DE.N.000000+XEF000.4.ANR")
-get_description <- function(key) {
-  vapply(get_dimensions(key), function(x) x$value[x$dim == "TITLE_COMPL"],
-         character(1))
+#' }
+get_description <- function(key, ...) {
+  dims <- get_dimensions(key, ...)
+  if (is.null(dims)) return(invisible(NULL))
+  vapply(dims, function(x) {
+    title <- x$value[x$dim == "TITLE_COMPL"]
+    if (length(title) == 0) NA_character_ else title[1]
+  }, character(1))
 }
 
 #' Format date variable retrieved from the SDW into a proper date variable
@@ -183,9 +211,20 @@ get_description <- function(key) {
 #' @export
 #'
 #' @examples
+#' convert_dates(c("2023", "2024"))
+#' convert_dates(c("2024-01", "2024-02"))
+#' convert_dates(c("2024-01-15", "2024-01-16"))
+#' if (requireNamespace("zoo", quietly = TRUE)) {
+#'   convert_dates(c("2024-Q1", "2024-Q2"))
+#' }
+#'
+#' \donttest{
 #' hicp <- get_data("ICP.M.U2.N.000000.4.ANR")
-#' hicp$obstime <- convert_dates(hicp$obstime)
-#' str(hicp)
+#' if (!is.null(hicp)) {
+#'   hicp$obstime <- convert_dates(hicp$obstime)
+#'   str(hicp)
+#' }
+#' }
 convert_dates <- function(x) {
 
   # Annual
@@ -223,7 +262,8 @@ create_query_url <- function(key, filter = NULL) {
   key_q <- regmatches(key, regexpr("^[[:alnum:]]+\\.", key),
                       invert = TRUE)[[1]][2]
 
-  if(any(names(filter) == "")) {
+  if(length(filter) > 0 &&
+     (is.null(names(filter)) || any(is.na(names(filter)) | names(filter) == ""))) {
     stop("All filter parameters must be named!")
   }
 
@@ -242,21 +282,67 @@ create_query_url <- function(key, filter = NULL) {
   query_url
 }
 
-check_status <- function(req) {
-  if(req$status_code >= 400)
-    stop("HTTP failure: ", req$status_code, "\n", httr::content(req, "text"))
-}
-
+# Perform a GET request against the ECB API.
+#
+# Never throws on network or HTTP problems: per CRAN policy, failures are
+# reported with an informative message and NULL is returned, so callers can
+# fail gracefully.
 make_request <- function(query_url, header_type, ...) {
 
   accept_headers <-
     c("metadata" = "application/vnd.sdmx.genericdata+xml;version=2.1",
       "data" = "application/vnd.sdmx.structurespecificdata+xml;version=2.1")
 
-  req <- httr::GET(query_url, httr::add_headers(
-    "Accept" = accept_headers[header_type],
-    "Accept-Encoding" = "gzip, deflate"), ...)
+  if (!curl::has_internet()) {
+    message("No internet connection. Could not retrieve data from the ECB API.")
+    return(invisible(NULL))
+  }
 
-  check_status(req)
+  req <- tryCatch(
+    httr::GET(query_url,
+              httr::timeout(getOption("ecb.timeout", 60)),
+              httr::add_headers(
+                "Accept" = accept_headers[[header_type]],
+                "Accept-Encoding" = "gzip, deflate"),
+              ...),
+    error = function(e) {
+      message("Could not connect to the ECB API (", query_url, "):\n",
+              conditionMessage(e))
+      NULL
+    }
+  )
+
+  if (is.null(req) || !check_status(req)) return(invisible(NULL))
   req
+}
+
+# Returns TRUE if the request succeeded; otherwise emits an informative
+# message and returns FALSE.
+check_status <- function(req) {
+  if (httr::status_code(req) < 400) return(TRUE)
+
+  body <- tryCatch(httr::content(req, "text", encoding = "utf-8"),
+                   error = function(e) "")
+  if (is.na(body)) body <- ""
+  body <- substr(trimws(body), 1, 500)
+
+  message("The ECB API request failed with HTTP status ",
+          httr::status_code(req), " (",
+          httr::http_status(req)$reason, ").",
+          if (nzchar(body)) paste0("\n", body) else "",
+          "\nThe series key or filter may be invalid, or the service may ",
+          "be temporarily unavailable.")
+  FALSE
+}
+
+# Parse an XML response, returning NULL with a message on failure.
+parse_xml <- function(req) {
+  tryCatch(
+    xml2::read_xml(httr::content(req, "text", encoding = "utf-8")),
+    error = function(e) {
+      message("Could not parse the response from the ECB API ",
+              "(the data format may have changed):\n", conditionMessage(e))
+      NULL
+    }
+  )
 }
