@@ -2,19 +2,24 @@
 #'
 #' @param ... Arguments passed to GET (e.g. timeout(10) to add maximum request time)
 #'
-#' @return A dataframe
+#' @return A dataframe, or \code{NULL} (with an informative message) if
+#'   the ECB Data Portal cannot be reached or returns an unexpected response.
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' df <- get_dataflows()
 #' head(df)
+#' }
 get_dataflows <- function(...) {
 
   query_url <- "https://data-api.ecb.europa.eu/service/dataflow"
 
   req <- make_request(query_url, "metadata", ...)
+  if (is.null(req)) return(invisible(NULL))
 
-  res <- xml2::read_xml(httr::content(req, "text"), verbose = TRUE)
+  res <- parse_response(req, xml2::read_xml)
+  if (is.null(res)) return(invisible(NULL))
 
   ecb_ns <- xml2::xml_ns(res) # xml namespace
 
@@ -76,13 +81,16 @@ get_dataflows <- function(...) {
 #' }
 #' See the \href{https://sdw-wsrest.ecb.europa.eu/}{SDW API} for more details.
 #'
-#' @return A data frame
+#' @return A data frame, or \code{NULL} (with an informative message) if
+#'   the ECB Data Portal cannot be reached or returns an unexpected response.
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' # Get monthly data on annualized euro area headline HICP
 #' hicp <- get_data("ICP.M.U2.N.000000.4.ANR")
 #' head(hicp)
+#' }
 get_data <- function(key, filter = NULL, ...) {
 
   if(!"detail" %in% names(filter)) {
@@ -90,21 +98,22 @@ get_data <- function(key, filter = NULL, ...) {
   }
 
   if(!filter[["detail"]] %in% c("full", "dataonly")) {
-    return(get_dimensions(key))
+    return(get_dimensions(key, ...))
   }
 
   query_url <- create_query_url(key, filter = filter)
 
   req <- make_request(query_url, "data", ...)
+  if (is.null(req)) return(invisible(NULL))
 
-  tmp <- tempfile()
-  writeLines(httr::content(req, "text", encoding = "utf-8"), tmp)
+  df <- parse_response(req, function(txt) {
+    tmp <- tempfile()
+    on.exit(unlink(tmp))
+    writeLines(txt, tmp)
+    as.data.frame(rsdmx::readSDMX(tmp, FALSE))
+  })
+  if (is.null(df)) return(invisible(NULL))
 
-  result <- rsdmx::readSDMX(tmp, FALSE)
-
-  unlink(tmp)
-
-  df <- as.data.frame(result)
   df <- structure(df,
                   class = c("tbl_df", "tbl", "data.frame"),
                   names = tolower(names(df)))
@@ -116,12 +125,16 @@ get_data <- function(key, filter = NULL, ...) {
 #' @param key A character string identifying the series to be retrieved
 #' @param ... Arguments passed to GET (e.g. timeout(10) to add maximum request time)
 #'
-#' @return A list of data frames, one for each series retrieved
+#' @return A list of data frames, one for each series retrieved, or
+#'   \code{NULL} (with an informative message) if the ECB Data Portal cannot be
+#'   reached or returns an unexpected response.
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' hicp_dims <- get_dimensions("ICP.M.U2.N.000000.4.ANR")
-#' hicp_dims[[1]]
+#' if (!is.null(hicp_dims)) hicp_dims[[1]]
+#' }
 get_dimensions <- function(key, ...) {
 
   query_url <- create_query_url(key, filter = list("detail" = "nodata"))
@@ -130,9 +143,10 @@ get_dimensions <- function(key, ...) {
   flow_ref <- regmatches(key, regexpr("^[[:alnum:]]+", key))
 
   req <- make_request(query_url, "metadata", ...)
+  if (is.null(req)) return(invisible(NULL))
 
-  skeys <- xml2::read_xml(httr::content(req, "text", encoding = "utf-8"),
-                          verbose = TRUE)
+  skeys <- parse_response(req, xml2::read_xml)
+  if (is.null(skeys)) return(invisible(NULL))
 
   skeys_ns <- xml2::xml_ns(skeys) # xml namespace
 
@@ -164,15 +178,20 @@ get_dimensions <- function(key, ...) {
 #' Get full, human-readable description of a series
 #'
 #' @param key A character string identifying the series to be retrieved
+#' @param ... Arguments passed to GET (e.g. timeout(10) to add maximum request time)
 #'
-#' @return A character vector
+#' @return A character vector, or \code{NULL} (with an informative message) if
+#'   the ECB Data Portal cannot be reached or returns an unexpected response.
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' get_description("ICP.M.DE.N.000000+XEF000.4.ANR")
-get_description <- function(key) {
-  vapply(get_dimensions(key), function(x) x$value[x$dim == "TITLE_COMPL"],
-         character(1))
+#' }
+get_description <- function(key, ...) {
+  dims <- get_dimensions(key, ...)
+  if (is.null(dims)) return(invisible(NULL))
+  vapply(dims, function(x) x$value[x$dim == "TITLE_COMPL"], character(1))
 }
 
 #' Format date variable retrieved from the SDW into a proper date variable
@@ -183,10 +202,19 @@ get_description <- function(key) {
 #' @export
 #'
 #' @examples
+#' convert_dates(c("2024-01", "2024-02", "2024-03"))
+#' convert_dates(c("2023-Q4", "2024-Q1"))
+#'
+#' \donttest{
 #' hicp <- get_data("ICP.M.U2.N.000000.4.ANR")
-#' hicp$obstime <- convert_dates(hicp$obstime)
-#' str(hicp)
+#' if (!is.null(hicp)) {
+#'   hicp$obstime <- convert_dates(hicp$obstime)
+#'   str(hicp)
+#' }
+#' }
 convert_dates <- function(x) {
+
+  if (length(x) == 0) return(x)
 
   # Annual
   if(grepl("^[0-9]{4}$", x[1])) {
@@ -242,21 +270,49 @@ create_query_url <- function(key, filter = NULL) {
   query_url
 }
 
-check_status <- function(req) {
-  if(req$status_code >= 400)
-    stop("HTTP failure: ", req$status_code, "\n", httr::content(req, "text"))
-}
-
+# Send a request to the ECB Data Portal API. Returns the response, or NULL
+# (with an informative message) if the API cannot be reached or returns an
+# HTTP error, as required by CRAN policy for packages using Internet resources.
 make_request <- function(query_url, header_type, ...) {
 
   accept_headers <-
     c("metadata" = "application/vnd.sdmx.genericdata+xml;version=2.1",
       "data" = "application/vnd.sdmx.structurespecificdata+xml;version=2.1")
 
-  req <- httr::GET(query_url, httr::add_headers(
-    "Accept" = accept_headers[header_type],
-    "Accept-Encoding" = "gzip, deflate"), ...)
+  # Default timeout; a timeout() passed through ... takes precedence
+  req <- tryCatch(
+    httr::GET(query_url, httr::timeout(60), httr::add_headers(
+      "Accept" = accept_headers[header_type],
+      "Accept-Encoding" = "gzip, deflate"), ...),
+    error = function(e) {
+      message("Could not connect to the ECB Data Portal API.\n",
+              "URL: ", query_url, "\n",
+              "Reason: ", conditionMessage(e))
+      NULL
+    })
 
-  check_status(req)
+  if (is.null(req)) return(NULL)
+
+  if (httr::http_error(req)) {
+    message("The ECB Data Portal API request failed.\n",
+            "URL: ", query_url, "\n",
+            "Status: ", httr::http_status(req)$message)
+    return(NULL)
+  }
+
   req
+}
+
+# Parse the body of a response with `parser`. Returns NULL (with an informative
+# message) if the API returned something that cannot be parsed, e.g. because
+# the API has changed.
+parse_response <- function(req, parser) {
+  tryCatch(
+    parser(httr::content(req, "text", encoding = "UTF-8")),
+    error = function(e) {
+      message("Could not parse the response from the ECB Data Portal API.\n",
+              "URL: ", req$url, "\n",
+              "Reason: ", conditionMessage(e))
+      NULL
+    })
 }

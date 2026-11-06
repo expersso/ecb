@@ -12,12 +12,16 @@ get_dimensions(key, ...)
 \item{...}{Arguments passed to GET (e.g. timeout(10) to add maximum request time)}
 }
 \value{
-A list of data frames, one for each series retrieved
+A list of data frames, one for each series retrieved, or
+  \code{NULL} (with an informative message) if the ECB Data Portal cannot be
+  reached or returns an unexpected response.
 }
 \description{
 Retrieve dimensions of series in the ECB's SDW
 }
 \examples{
+\donttest{
 hicp_dims <- get_dimensions("ICP.M.U2.N.000000.4.ANR")
-hicp_dims[[1]]
+if (!is.null(hicp_dims)) hicp_dims[[1]]
+}
 }
