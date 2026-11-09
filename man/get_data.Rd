@@ -59,7 +59,7 @@ Available filter parameters:
    \item \code{true} returns version currently in production, as well as all previous versions
    }
 }
-See the \href{https://sdw-wsrest.ecb.europa.eu/}{SDW API} for more details.
+See the \href{https://data.ecb.europa.eu/help/api/data}{ECB Data Portal API documentation} for more details.
 }
 \examples{
 \donttest{

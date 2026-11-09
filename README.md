@@ -87,7 +87,7 @@ Available filter parameters:
     -   `true` returns version currently in production, as well as all
         previous versions
 
-See the [EDP API](https://data-api.ecb.europa.eu/) for more details.
+See the [ECB Data Portal API documentation](https://data.ecb.europa.eu/help/api/data) for more details.
 
 #### Using EDP keys
 

@@ -79,7 +79,7 @@ get_dataflows <- function(...) {
 #'    \item \code{true} returns version currently in production, as well as all previous versions
 #'    }
 #' }
-#' See the \href{https://sdw-wsrest.ecb.europa.eu/}{SDW API} for more details.
+#' See the \href{https://data.ecb.europa.eu/help/api/data}{ECB Data Portal API documentation} for more details.
 #'
 #' @return A data frame, or \code{NULL} (with an informative message) if
 #'   the ECB Data Portal cannot be reached or returns an unexpected response.

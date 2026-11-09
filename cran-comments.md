@@ -1,5 +1,14 @@
 ## Resubmission
 
+This is a resubmission. In this version I have:
+
+* Replaced the invalid URL https://sdw-wsrest.ecb.europa.eu/ in
+  `man/get_data.Rd` with the current ECB Data Portal API documentation
+  (https://data.ecb.europa.eu/help/api/data), and updated a link to the bare
+  API endpoint in the vignette to point to the same documentation page.
+
+## Previous submission
+
 This version addresses the check failures reported by the CRAN team on
 <https://cran.r-project.org/web/checks/check_results_ecb.html> (examples and
 vignette erroring with "HTTP failure: 504" when the ECB Data Portal API was
